@@ -13,18 +13,18 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'David Adarkwah — Senior AI & Data Engineer',
+  title: '▲dark.',
   description:
     'I engineer the foundation for applied intelligence. Senior AI & Data Engineer at Bloomberg LP. Building Residia.',
   openGraph: {
-    title: 'David Adarkwah — Senior AI & Data Engineer',
+    title: '▲dark.',
     description: 'Bridging the gap between chaotic data and autonomous systems.',
     url: 'https://dadark.dev',
     images: [{ url: '/og-image.jpg' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'David Adarkwah — Senior AI & Data Engineer',
+    title: '▲dark.',
   },
 }
 
