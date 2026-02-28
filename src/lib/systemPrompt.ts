@@ -1,6 +1,5 @@
 import { readFile } from 'fs/promises'
 import { join } from 'path'
-import { PDFParse } from 'pdf-parse'
 import {
   personalInfo,
   experience,
@@ -11,22 +10,20 @@ import {
 } from '@/data/content'
 import { buildPromptFromSections } from './promptTemplate'
 
-/* ─── CV Parser ────────────────────────────────────────────────────── */
+/* ─── CV Reader ────────────────────────────────────────────────────── */
 
 let cachedCvText: string | null = null
 
-async function parseCv(): Promise<string> {
+/** Reads pre-extracted CV text generated at build time by scripts/extract-cv.mjs */
+async function readCv(): Promise<string> {
   if (cachedCvText) return cachedCvText
 
   try {
-    const cvPath = join(process.cwd(), 'public', 'david-cv.pdf')
-    const buffer = await readFile(cvPath)
-    const pdf = new PDFParse({ data: new Uint8Array(buffer) })
-    const result = await pdf.getText()
-    cachedCvText = result.text.trim()
+    const cvPath = join(process.cwd(), 'src', 'data', 'cv.txt')
+    cachedCvText = (await readFile(cvPath, 'utf-8')).trim()
     return cachedCvText
   } catch (err) {
-    console.error('Failed to parse CV PDF:', err)
+    console.error('Failed to read CV text:', err)
     return '(CV unavailable)'
   }
 }
@@ -91,7 +88,7 @@ function formatProjects(): string {
 /* ─── System Prompt Builder ────────────────────────────────────────── */
 
 export async function buildSystemPrompt(): Promise<string> {
-  const cvText = await parseCv()
+  const cvText = await readCv()
 
   const today = new Date()
   const currentDate = today.toLocaleDateString('en-GB', {
