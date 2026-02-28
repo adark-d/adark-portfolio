@@ -1,60 +1,173 @@
-import { ArrowRight, Download, Github, Linkedin } from 'lucide-react'
+/**
+ * Hero section with a live neural network canvas background and
+ * fluid clamp()-based typography overlay.
+ *
+ * The canvas renders a layered feedforward network (nodes, edges,
+ * signal pulses) via the engine in `@/lib/neuralNetwork`. Cursor
+ * proximity triggers activation cascades that propagate forward
+ * through the layers — a visual metaphor for AI data processing.
+ *
+ * All text sizing uses CSS clamp() for smooth responsive scaling
+ * from mobile to ultrawide — no breakpoints needed.
+ */
+
+'use client'
+
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { personalInfo } from '@/data/content'
+import { ChevronDown } from 'lucide-react'
+import {
+  type Network,
+  buildNetwork,
+  updateNetwork,
+  renderNetwork,
+} from '@/lib/neuralNetwork'
+
+/* ─── Component ────────────────────────────────────────────────────── */
 
 export default function Hero() {
-  return (
-    <section className="mx-auto flex min-h-screen max-w-6xl flex-col justify-center px-6 pt-32 pb-16 md:px-12 md:pt-20">
-      <div className="max-w-4xl">
-        <div className="mb-6 flex items-center gap-4 md:mb-8">
-          <span className="h-px w-8 bg-orange-600 md:w-12"></span>
-          <p className="text-xs font-medium tracking-widest text-orange-700 uppercase md:text-sm">
-            Portfolio 2026
-          </p>
-        </div>
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const networkRef = useRef<Network>({ nodes: [], edges: [], numLayers: 6 })
+  const mouseRef = useRef({ x: -9999, y: -9999 })
+  const animRef = useRef<number>(0)
+  const frameRef = useRef(0)
+  const [revealed, setRevealed] = useState(false)
 
-        <h1 className="mb-6 font-serif text-5xl leading-[1.1] tracking-tight text-stone-900 md:mb-8 md:text-7xl md:leading-[1.05] lg:text-8xl">
-          Hi, I&apos;m {personalInfo.name}.
-          <br />
-          <span className="font-light text-stone-400 italic">I engineer intelligence.</span>
+  useEffect(() => {
+    let active = true
+    const canvas = canvasRef.current
+    const container = containerRef.current
+    if (!canvas || !container) return
+
+    const ctx = canvas.getContext('2d')!
+    const dpr = window.devicePixelRatio || 1
+
+    const setup = () => {
+      if (!active) return
+
+      const isMobile = window.innerWidth < 768
+      const rect = container.getBoundingClientRect()
+      const w = rect.width
+      const h = rect.height
+
+      canvas.width = w * dpr
+      canvas.height = h * dpr
+      canvas.style.width = `${w}px`
+      canvas.style.height = `${h}px`
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+
+      networkRef.current = buildNetwork(w, h, isMobile)
+      frameRef.current = 0
+
+      const draw = () => {
+        if (!active) return
+        frameRef.current++
+        ctx.clearRect(0, 0, w, h)
+        updateNetwork(networkRef.current, mouseRef.current.x, mouseRef.current.y, frameRef.current, isMobile)
+        renderNetwork(ctx, networkRef.current, isMobile)
+        animRef.current = requestAnimationFrame(draw)
+      }
+
+      animRef.current = requestAnimationFrame(draw)
+      setTimeout(() => { if (active) setRevealed(true) }, 600)
+    }
+
+    setup()
+
+    let resizeTimer: ReturnType<typeof setTimeout>
+    const handleResize = () => {
+      clearTimeout(resizeTimer)
+      resizeTimer = setTimeout(() => {
+        cancelAnimationFrame(animRef.current)
+        setRevealed(false)
+        setup()
+      }, 300)
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      active = false
+      cancelAnimationFrame(animRef.current)
+      clearTimeout(resizeTimer)
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
+
+  /* ── Mouse / Touch ──────────────────────────────────────────────── */
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    const rect = containerRef.current?.getBoundingClientRect()
+    if (!rect) return
+    mouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top }
+  }, [])
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    const rect = containerRef.current?.getBoundingClientRect()
+    if (!rect) return
+    const t = e.touches[0]
+    mouseRef.current = { x: t.clientX - rect.left, y: t.clientY - rect.top }
+  }, [])
+
+  const resetMouse = useCallback(() => {
+    mouseRef.current = { x: -9999, y: -9999 }
+  }, [])
+
+  /* ── Render ─────────────────────────────────────────────────────── */
+
+  return (
+    <div
+      ref={containerRef}
+      onMouseMove={handleMouseMove}
+      onTouchMove={handleTouchMove}
+      onMouseLeave={resetMouse}
+      onTouchEnd={resetMouse}
+      className="relative flex h-full w-full flex-col items-center justify-center"
+    >
+      <canvas ref={canvasRef} className="absolute inset-0 z-0" />
+
+      {/* Identity — clamp()-scaled typography, no breakpoints needed */}
+      <div className="pointer-events-none relative z-10 flex flex-col items-center gap-[clamp(0.75rem,2vw,2rem)] px-6">
+        <h1
+          className={`text-center font-serif font-semibold leading-[0.95] tracking-tight text-white transition-all duration-1000 text-[clamp(1.75rem,7vw,7.5rem)] ${
+            revealed ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
+          }`}
+        >
+          David<br />Adarkwah
         </h1>
 
-        <p className="mb-10 max-w-2xl text-lg leading-relaxed font-light text-stone-600 md:mb-12 md:text-2xl">
-          <strong className="font-semibold text-stone-900">{personalInfo.tagline}</strong>{' '}
-          {personalInfo.subTagline}
+        <p
+          className={`max-w-xl text-center font-serif tracking-tight text-white/40 italic transition-all delay-300 duration-1000 text-[clamp(0.8rem,2.5vw,1.625rem)] ${
+            revealed ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+          }`}
+        >
+          {personalInfo.tagline}
         </p>
 
-        <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-6">
-          <a
-            href="#work"
-            className="group flex w-full items-center justify-center gap-3 rounded-full bg-stone-900 px-8 py-4 font-medium text-stone-100 transition-all duration-300 hover:bg-orange-700 sm:w-auto"
-          >
-            View My Work
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </a>
-          <div className="flex w-full items-center justify-center gap-4 text-stone-500 sm:w-auto sm:justify-start">
-            <a
-              href={personalInfo.cv}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex h-12 items-center gap-2 rounded-full border border-stone-200 bg-white p-2 px-4 text-sm font-medium shadow-sm transition-all hover:border-stone-400 hover:text-stone-900 sm:h-auto"
-            >
-              <Download className="h-4 w-4" /> Resume
-            </a>
-            <a
-              href={personalInfo.github}
-              className="flex h-12 w-12 items-center justify-center p-2 transition-colors hover:text-stone-900 sm:h-auto sm:w-auto"
-            >
-              <Github className="h-5 w-5" />
-            </a>
-            <a
-              href={personalInfo.linkedin}
-              className="flex h-12 w-12 items-center justify-center p-2 transition-colors hover:text-stone-900 sm:h-auto sm:w-auto"
-            >
-              <Linkedin className="h-5 w-5" />
-            </a>
-          </div>
-        </div>
+        <p
+          className={`text-center font-mono tracking-[0.2em] text-white/20 uppercase transition-all delay-500 duration-1000 text-[clamp(0.45rem,1.2vw,0.85rem)] ${
+            revealed ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0'
+          }`}
+        >
+          {personalInfo.role} · {personalInfo.location}
+        </p>
       </div>
-    </section>
+
+      {/* Scroll Indicator */}
+      <div
+        className={`absolute bottom-[clamp(1rem,3vw,2.5rem)] left-1/2 z-10 -translate-x-1/2 transition-all delay-700 duration-1000 ${
+          revealed ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0'
+        }`}
+      >
+        <button
+          onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
+          className="flex flex-col items-center gap-[clamp(0.25rem,0.5vw,0.5rem)] text-white/15 transition-colors hover:text-white/30"
+        >
+          <span className="font-mono tracking-[0.3em] uppercase text-[clamp(0.4rem,0.8vw,0.6rem)]">Scroll</span>
+          <ChevronDown style={{ width: 'clamp(0.75rem, 1.2vw, 1rem)', height: 'clamp(0.75rem, 1.2vw, 1rem)' }} className="animate-bounce" />
+        </button>
+      </div>
+    </div>
   )
 }
