@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
-import './globals.css'
+
+/* ─── Fonts ─────────────────────────────────────────────────────────── */
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -12,26 +13,112 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 })
 
+/* ─── SEO & Open Graph ──────────────────────────────────────────────── */
+
+const META_DESCRIPTION =
+  'Senior AI & Data Engineer. Building fault-tolerant pipelines, production MLOps platforms, and multi-agent systems.'
+
 export const metadata: Metadata = {
-  title: '▲dark.',
-  description:
-    'I engineer the foundation for applied intelligence. Senior AI & Data Engineer at Bloomberg LP. Building Residia.',
+  title: 'Adarkwah.',
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
+  description: META_DESCRIPTION,
+  metadataBase: new URL('https://dadark.dev'),
   openGraph: {
     title: '▲dark.',
-    description: 'Bridging the gap between chaotic data and autonomous systems.',
+    description: META_DESCRIPTION,
     url: 'https://dadark.dev',
-    images: [{ url: '/og-image.jpg' }],
+    siteName: '▲dark.',
+    images: [{ url: '/og-image.jpeg', width: 1200, height: 630 }],
+    locale: 'en_GB',
+    type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: '▲dark.',
+    description: META_DESCRIPTION,
+    images: ['/og-image.jpeg'],
   },
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+/* ─── Root Layout ───────────────────────────────────────────────────── */
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
+      <head>
+        <script src="https://cdn.tailwindcss.com" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              tailwind.config = {
+                theme: {
+                  extend: {
+                    fontFamily: {
+                      sans: ['var(--font-geist-sans)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                      mono: ['var(--font-geist-mono)', 'ui-monospace', 'monospace'],
+                      serif: ['Playfair Display', 'Georgia', 'serif'],
+                    },
+                    animation: {
+                      spinSlow: 'spinSlow 12s linear infinite',
+                      spinSlowReverse: 'spinSlowReverse 8s linear infinite',
+                      dataFlow: 'dataFlow 1.2s linear infinite',
+                      fadeInTerminal: 'fadeInTerminal 0s ease-in forwards',
+                    },
+                    keyframes: {
+                      dataFlow: {
+                        '0%': { left: '-20%', opacity: '0' },
+                        '20%': { opacity: '1' },
+                        '80%': { opacity: '1' },
+                        '100%': { left: '100%', opacity: '0' },
+                      },
+                      spinSlow: {
+                        from: { transform: 'rotate(0deg)' },
+                        to: { transform: 'rotate(360deg)' },
+                      },
+                      spinSlowReverse: {
+                        from: { transform: 'rotate(360deg)' },
+                        to: { transform: 'rotate(0deg)' },
+                      },
+                      fadeInTerminal: {
+                        to: { opacity: '1' },
+                      },
+                    },
+                  },
+                },
+              }
+            `,
+          }}
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap"
+          rel="stylesheet"
+          crossOrigin="anonymous"
+        />
+        <style>{`
+          * { box-sizing: border-box; margin: 0; padding: 0; }
+          html { scroll-behavior: smooth; }
+          body {
+            background-color: #050505;
+            color: #ffffff;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+          }
+          .font-serif { font-family: 'Playfair Display', Georgia, serif; }
+          .hide-scroll::-webkit-scrollbar { display: none; }
+          .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+        `}</style>
+      </head>
+      <body className={`${geistSans.variable} ${geistMono.variable} bg-[#050505] text-white antialiased`}>
+        {children}
+      </body>
     </html>
   )
 }

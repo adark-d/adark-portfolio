@@ -1,91 +1,202 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Command, MoveRight } from 'lucide-react'
+import { Github, Linkedin, X } from 'lucide-react'
+import { personalInfo } from '@/data/content'
+import { useChat } from '@/context/ChatContext'
+import { useActiveSection } from '@/hooks/useActiveSection'
+import { SECTION_IDS, NAV_ITEMS } from '@/config/navigation'
 
-interface NavbarProps {
-  onOpenCmdK: () => void
+function scrollTo(id: string) {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
 }
 
-export default function Navbar({ onOpenCmdK }: NavbarProps) {
-  const [isScrolled, setIsScrolled] = useState(false)
+/* ─── Component ─────────────────────────────────────────────────────── */
+
+export default function Navbar() {
+  const activeSection = useActiveSection(SECTION_IDS)
+  const activeSectionObj = NAV_ITEMS.find((n) => n.id === activeSection) || NAV_ITEMS[0]
+  const { toggle, isOpen } = useChat()
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [scrollY, setScrollY] = useState(0)
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50)
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    const onScroll = () => requestAnimationFrame(() => setScrollY(window.scrollY))
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  const isScrolled = scrollY > 50
+
   return (
-    <nav
-      className={`fixed top-0 z-40 w-full transition-all duration-500 ${isScrolled ? 'border-b border-stone-200 bg-[#FAF9F6]/90 py-4 shadow-sm backdrop-blur-md' : 'bg-transparent py-6 md:py-8'}`}
-    >
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 md:px-12">
-        {/* Logo */}
-        <a href="#" className="group flex cursor-pointer flex-col outline-none">
-          <div className="flex items-end">
-            <svg
-              viewBox="0 0 24 24"
-              className="h-[20px] w-[20px] stroke-current text-stone-900 transition-transform duration-500 group-hover:-translate-y-0.5 md:h-[22px] md:w-[22px]"
+    <>
+      {/* ── Full-Screen Mobile Menu Overlay ────────────────────────────── */}
+      <div
+        className={`fixed inset-0 z-[60] flex flex-col justify-center bg-[#050505]/95 px-12 backdrop-blur-3xl transition-all duration-700 ${
+          isMobileMenuOpen
+            ? 'pointer-events-auto opacity-100'
+            : 'pointer-events-none opacity-0'
+        }`}
+      >
+        <button
+          onClick={() => setIsMobileMenuOpen(false)}
+          className="absolute top-8 right-8 p-2 text-white/50 transition-transform hover:rotate-90 hover:text-white"
+        >
+          <X className="h-8 w-8" />
+        </button>
+        <div className="flex flex-col gap-8">
+          {NAV_ITEMS.map((nav, i) => (
+            <button
+              key={nav.id}
+              onClick={() => { setIsMobileMenuOpen(false); scrollTo(nav.id) }}
+              className={`transform text-left font-serif text-3xl text-white transition-all duration-500 hover:text-cyan-400 md:text-6xl ${
+                isMobileMenuOpen
+                  ? 'translate-y-0 opacity-100'
+                  : 'translate-y-12 opacity-0'
+              }`}
+              style={{ transitionDelay: `${i * 100 + 100}ms` }}
             >
-              <path
-                d="M 3 24 L 12 2 L 21 24"
-                fill="none"
-                strokeWidth="4.5"
-                strokeLinejoin="miter"
-                strokeMiterlimit="10"
-              />
-            </svg>
-            <span className="ml-[1px] translate-y-[2px] text-xl leading-none font-medium tracking-tighter text-stone-500 transition-colors duration-500 group-hover:text-stone-800 md:translate-y-[3px] md:text-2xl">
-              dark
-            </span>
-          </div>
-          <div className="mt-1.5 flex w-full items-center opacity-70 transition-opacity duration-500 group-hover:opacity-100">
-            <div className="h-[2px] flex-grow bg-stone-300 transition-colors duration-500 group-hover:bg-stone-800"></div>
-            <div className="ml-1 h-1.5 w-1.5 rounded-full bg-orange-600 transition-all duration-500 group-hover:bg-orange-500 group-hover:shadow-[0_0_8px_rgba(234,88,12,0.6)]"></div>
-          </div>
-        </a>
-
-        {/* Desktop Menu */}
-        <div className="hidden items-center gap-8 text-sm font-medium text-stone-500 md:flex">
-          <a href="#about" className="transition-colors hover:text-stone-900">
-            About
-          </a>
-          <a href="#expertise" className="transition-colors hover:text-stone-900">
-            Expertise
-          </a>
-          <a href="#work" className="transition-colors hover:text-stone-900">
-            Selected Work
-          </a>
-
+              <span className="mr-4 mb-2 block font-mono text-xs tracking-widest text-cyan-500/50 uppercase">
+                {nav.index}
+              </span>
+              <span className="capitalize">{nav.label}</span>
+            </button>
+          ))}
+          {/* AI chat toggle in mobile menu */}
           <button
-            onClick={onOpenCmdK}
-            className="group flex items-center gap-2 rounded-full border border-stone-200 bg-stone-100 px-3 py-1.5 text-stone-500 transition-all hover:bg-stone-200 hover:text-stone-800"
+            onClick={() => { setIsMobileMenuOpen(false); toggle() }}
+            className={`transform text-left font-serif text-3xl transition-all duration-500 md:text-6xl ${
+              isMobileMenuOpen
+                ? 'translate-y-0 opacity-100'
+                : 'translate-y-12 opacity-0'
+            } ${isOpen ? 'text-cyan-400' : 'text-white hover:text-cyan-400'}`}
+            style={{ transitionDelay: `${NAV_ITEMS.length * 100 + 100}ms` }}
           >
-            <Command className="h-3.5 w-3.5" />
-            <span>Command</span>
-            <span className="ml-1 flex gap-0.5 opacity-70">
-              <kbd className="font-mono text-[10px]">⌘</kbd>
-              <kbd className="font-mono text-[10px]">K</kbd>
+            <span className="mr-4 mb-2 block font-mono text-xs tracking-widest text-cyan-500/50 uppercase">
+              06
+            </span>
+            <span className="relative">
+              AI Assistant
+              <span className="ml-3 inline-block h-2 w-2 rounded-full bg-cyan-400">
+                <span className="absolute inline-flex h-2 w-2 animate-ping rounded-full bg-cyan-400 opacity-75" />
+              </span>
             </span>
           </button>
+        </div>
+      </div>
 
-          <a
-            href="#contact"
-            className="flex items-center gap-1 text-stone-900 transition-colors hover:text-orange-700"
-          >
-            Connect <MoveRight className="h-4 w-4" />
-          </a>
+      {/* ── Morphing Mirror HUD (Notch → Fixed Frosted Navbar) ─────────── */}
+      <nav
+        className={`fixed z-50 flex items-center justify-center overflow-hidden transition-all duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isScrolled
+            ? 'top-0 left-0 h-16 w-full translate-x-0 rounded-none border-b border-white/10 bg-black/20 shadow-[0_10px_40px_rgba(0,0,0,0.5)] saturate-[1.5] backdrop-blur-2xl md:h-20'
+            : 'top-6 left-1/2 h-12 w-[240px] -translate-x-1/2 rounded-full border border-white/10 bg-[#0a0a0a]/80 backdrop-blur-xl md:top-8 md:h-14 md:w-[280px] md:hover:w-[calc(100vw-6rem)] lg:hover:w-[calc(100vw-12rem)] md:hover:max-w-[1400px]'
+        } group cursor-pointer md:cursor-default`}
+        onClick={() => {
+          if (!isScrolled && window.innerWidth < 768) setIsMobileMenuOpen(true)
+        }}
+      >
+        {/* Collapsed State: System Status Indicator (Notch mode only) */}
+        <div
+          className={`absolute flex items-center justify-center gap-3 transition-all duration-500 ease-out ${
+            isScrolled
+              ? 'pointer-events-none hidden scale-90 opacity-0'
+              : 'md:group-hover:pointer-events-none md:group-hover:scale-90 md:group-hover:opacity-0'
+          }`}
+        >
+          <div className="h-1.5 w-1.5 animate-[pulse_2s_ease-in-out_infinite] rounded-full bg-cyan-400 shadow-[0_0_10px_#22d3ee]" />
+          <span className="flex items-center gap-2 font-mono text-[10px] tracking-widest whitespace-nowrap text-white/60 uppercase md:text-xs">
+            {activeSectionObj.id !== 'origin' && (
+              <>
+                <span className="text-white/30">{activeSectionObj.index}</span>
+                <span className="text-white/20">//</span>
+              </>
+            )}
+            <span className="text-white">{activeSectionObj.label}</span>
+          </span>
+          {/* Mobile hamburger hint */}
+          <div className="ml-2 flex flex-col gap-[3px] opacity-50 md:hidden">
+            <span className="block h-[1px] w-3 bg-white" />
+            <span className="block h-[1px] w-2 bg-white" />
+          </div>
         </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          onClick={onOpenCmdK}
-          className="flex items-center gap-2 rounded-full border border-stone-200 bg-stone-100 px-4 py-2 text-sm font-medium text-stone-800 transition-colors hover:bg-stone-200 md:hidden"
+        {/* Expanded / Scrolled Mirror State: Full Command Center */}
+        <div
+          className={`mx-auto h-full w-full max-w-[1400px] items-center justify-between transition-all duration-700 ease-out ${
+            isScrolled
+              ? 'pointer-events-auto flex scale-100 px-6 opacity-100 md:px-12 lg:px-24'
+              : 'pointer-events-none absolute inset-0 hidden scale-105 px-8 opacity-0 group-hover:pointer-events-auto group-hover:scale-100 group-hover:opacity-100 md:flex'
+          }`}
         >
-          <Command className="h-4 w-4" /> Menu
-        </button>
-      </div>
-    </nav>
+          <span className="font-serif text-xl font-medium tracking-tighter text-white">
+            Adarkwah.
+          </span>
+
+          <div className="hidden items-center gap-1 rounded-full border border-white/5 bg-white/[0.03] p-1.5 shadow-inner md:flex">
+            {NAV_ITEMS.map((nav) => (
+              <button
+                key={nav.id}
+                onClick={() => scrollTo(nav.id)}
+                className={`rounded-full px-5 py-2 font-mono text-[10px] tracking-widest uppercase transition-all duration-300 ${
+                  activeSection === nav.id
+                    ? 'bg-white font-bold text-black shadow-[0_0_20px_rgba(255,255,255,0.2)]'
+                    : 'text-white/40 hover:bg-white/10 hover:text-white'
+                }`}
+              >
+                {nav.short}
+              </button>
+            ))}
+            <button
+              onClick={toggle}
+              className={`relative rounded-full px-5 py-2 font-mono text-[10px] tracking-widest uppercase transition-all duration-300 ${
+                isOpen
+                  ? 'bg-cyan-400/10 text-cyan-400'
+                  : 'text-white/40 hover:bg-white/10 hover:text-white'
+              }`}
+            >
+              ai
+              <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-cyan-400">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75" />
+              </span>
+            </button>
+          </div>
+
+          <div className="flex items-center gap-5">
+            <div className="hidden items-center gap-5 md:flex">
+              <a
+                href={personalInfo.linkedin}
+                target="_blank"
+                rel="noreferrer"
+                className="text-white/30 transition-colors hover:text-cyan-400"
+              >
+                <Linkedin className="h-4 w-4" />
+              </a>
+              <a
+                href={personalInfo.github}
+                target="_blank"
+                rel="noreferrer"
+                className="text-white/30 transition-colors hover:text-cyan-400"
+              >
+                <Github className="h-4 w-4" />
+              </a>
+            </div>
+
+            {/* Mobile hamburger (visible in scrolled mirror state) */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                setIsMobileMenuOpen(true)
+              }}
+              className={`flex flex-col gap-1.5 p-2 md:hidden ${isScrolled ? 'block' : 'hidden'}`}
+            >
+              <span className="block h-[2px] w-6 bg-white" />
+              <span className="block h-[2px] w-4 bg-white" />
+            </button>
+          </div>
+        </div>
+      </nav>
+
+    </>
   )
 }

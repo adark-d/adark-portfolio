@@ -1,3 +1,5 @@
+/* ─── Portfolio Types ────────────────────────────────────────────────── */
+
 export interface PersonalInfo {
   name: string
   fullName: string
@@ -23,8 +25,19 @@ export interface Experience {
   tags: string[]
 }
 
+export interface CareerStage {
+  phase: string
+  role: string
+  org: string
+  period: string
+  focus: string
+  description: string
+  iconName: 'Database' | 'Cpu' | 'Network' | 'BrainCircuit'
+}
+
 export interface Award {
   title: string
+  category: string
   date: string
   desc: string
 }
@@ -48,17 +61,32 @@ export interface ProjectArchitecture {
 export interface ProjectDetails {
   problem: string
   architecture: ProjectArchitecture[]
-  impact: string
-  githubUrl: string
-  liveUrl: string
+  impact?: string
+  githubUrl?: string
+  liveUrl?: string
 }
 
 export interface Project {
   id: string
   title: string
+  type: 'System' | 'Article' | 'Talk'
   category: string
+  year: string
   description: string
   stack: string[]
   image: string
   details: ProjectDetails
+}
+
+/* ─── Chat Types ────────────────────────────────────────────────────── */
+
+export interface ChatMessage {
+  id: string
+  role: 'user' | 'assistant'
+  content: string
+  timestamp: number
+}
+
+export interface ChatRequestBody {
+  messages: Array<{ role: 'user' | 'assistant'; content: string }>
 }
