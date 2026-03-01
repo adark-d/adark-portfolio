@@ -18,35 +18,40 @@ export default function Uplink() {
           <span className="text-accent/60 italic">meaningful.</span>
         </h2>
 
-        <div className="flex flex-col gap-3 md:flex-row md:flex-wrap md:items-center md:justify-center md:gap-6">
+        <div className="flex items-center justify-center gap-5 md:flex-wrap md:gap-6">
           <a
             href={`mailto:${personalInfo.email}`}
-            className="flex w-full items-center justify-center gap-3 rounded-full bg-accent px-6 py-3.5 text-sm font-medium text-[#060810] shadow-[0_0_30px_rgba(94,234,212,0.2)] transition-transform hover:scale-105 md:w-auto md:px-10 md:py-5 md:text-lg"
+            className="flex h-14 w-14 items-center justify-center rounded-full bg-accent text-[#060810] shadow-[0_0_30px_rgba(94,234,212,0.2)] transition-transform hover:scale-110 md:h-auto md:w-auto md:gap-3 md:px-10 md:py-5 md:text-lg md:font-medium"
           >
-            <Mail className="h-4 w-4 md:h-5 md:w-5" /> Say Hello
+            <Mail className="h-5 w-5" />
+            <span className="hidden md:inline">Say Hello</span>
           </a>
           <a
             href={personalInfo.calendly}
             target="_blank"
             rel="noreferrer"
-            className="flex w-full items-center justify-center gap-3 rounded-full border border-[#f0ede6]/15 px-6 py-3.5 text-sm font-medium text-[#f0ede6] transition-colors hover:bg-[#f0ede6]/8 md:w-auto md:px-10 md:py-5 md:text-lg"
+            className="flex h-14 w-14 items-center justify-center rounded-full border border-[#f0ede6]/15 text-[#f0ede6] transition-colors hover:bg-[#f0ede6]/8 md:h-auto md:w-auto md:gap-3 md:px-10 md:py-5 md:text-lg md:font-medium"
           >
-            <Calendar className="h-4 w-4 md:h-5 md:w-5" /> Schedule a Call
+            <Calendar className="h-5 w-5" />
+            <span className="hidden md:inline">Schedule a Call</span>
           </a>
           <a
             href={personalInfo.cv}
             download
-            className="flex w-full items-center justify-center gap-3 rounded-full border border-[#f0ede6]/15 px-6 py-3.5 text-sm font-medium text-[#f0ede6] transition-colors hover:bg-[#f0ede6]/8 md:w-auto md:px-10 md:py-5 md:text-lg"
+            className="flex h-14 w-14 items-center justify-center rounded-full border border-[#f0ede6]/15 transition-colors hover:bg-[#f0ede6]/8 md:h-auto md:w-auto md:gap-3 md:px-10 md:py-5 md:text-lg md:font-medium md:text-[#f0ede6]"
           >
-            <Download className="h-4 w-4 md:h-5 md:w-5" /> Download CV
+            <span className="font-mono text-sm font-bold tracking-wider text-[#f0ede6] md:hidden">CV</span>
+            <Download className="hidden h-5 w-5 md:block" />
+            <span className="hidden md:inline">Download CV</span>
           </a>
           <a
             href={personalInfo.linkedin}
             target="_blank"
             rel="noreferrer"
-            className="flex w-full items-center justify-center gap-3 rounded-full border border-[#f0ede6]/15 px-6 py-3.5 text-sm font-medium text-[#f0ede6] transition-colors hover:bg-[#f0ede6]/8 md:w-auto md:px-10 md:py-5 md:text-lg"
+            className="flex h-14 w-14 items-center justify-center rounded-full border border-[#f0ede6]/15 text-[#f0ede6] transition-colors hover:bg-[#f0ede6]/8 md:h-auto md:w-auto md:gap-3 md:px-10 md:py-5 md:text-lg md:font-medium"
           >
-            <Linkedin className="h-4 w-4 md:h-5 md:w-5" /> LinkedIn
+            <Linkedin className="h-5 w-5" />
+            <span className="hidden md:inline">LinkedIn</span>
           </a>
         </div>
       </section>
