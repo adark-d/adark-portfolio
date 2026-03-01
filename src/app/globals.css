@@ -1,2 +1,6 @@
 /* Tailwind is loaded via CDN in layout.tsx */
-/* This file is intentionally minimal */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(240, 237, 230, 0.08) transparent;
+}

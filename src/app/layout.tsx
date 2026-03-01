@@ -61,6 +61,14 @@ export default function RootLayout({
               tailwind.config = {
                 theme: {
                   extend: {
+                    colors: {
+                      void: '#060810',
+                      surface: '#0b0d17',
+                      elevated: '#10131f',
+                      raised: '#161a2a',
+                      accent: '#5eead4',
+                      warm: '#d4a853',
+                    },
                     fontFamily: {
                       sans: ['var(--font-geist-sans)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
                       mono: ['var(--font-geist-mono)', 'ui-monospace', 'monospace'],
@@ -105,9 +113,10 @@ export default function RootLayout({
         <style>{`
           * { box-sizing: border-box; margin: 0; padding: 0; }
           html { scroll-behavior: smooth; }
+          ::selection { background: rgba(94, 234, 212, 0.25); color: #f0ede6; }
           body {
-            background-color: #050505;
-            color: #ffffff;
+            background-color: #060810;
+            color: #f0ede6;
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
           }
@@ -116,7 +125,7 @@ export default function RootLayout({
           .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
         `}</style>
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} bg-[#050505] text-white antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} bg-void text-[#f0ede6] antialiased`}>
         {children}
       </body>
     </html>
