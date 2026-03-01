@@ -43,13 +43,24 @@ export default function Hero() {
     const ctx = canvas.getContext('2d')!
     const dpr = window.devicePixelRatio || 1
 
-    const setup = () => {
+    /* Track the last known container size to detect real changes */
+    let lastW = 0
+    let lastH = 0
+    let currentIsMobile = window.innerWidth < 768
+
+    const resize = () => {
       if (!active) return
 
-      const isMobile = window.innerWidth < 768
       const rect = container.getBoundingClientRect()
-      const w = rect.width
-      const h = rect.height
+      const w = Math.round(rect.width)
+      const h = Math.round(rect.height)
+
+      if (w === 0 || h === 0) return
+      if (w === lastW && h === lastH) return
+
+      lastW = w
+      lastH = h
+      currentIsMobile = window.innerWidth < 768
 
       canvas.width = w * dpr
       canvas.height = h * dpr
@@ -57,41 +68,42 @@ export default function Hero() {
       canvas.style.height = `${h}px`
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 
-      networkRef.current = buildNetwork(w, h, isMobile)
+      networkRef.current = buildNetwork(w, h, currentIsMobile)
       frameRef.current = 0
+    }
 
-      const draw = () => {
-        if (!active) return
-        frameRef.current++
-        ctx.clearRect(0, 0, w, h)
-        updateNetwork(networkRef.current, mouseRef.current.x, mouseRef.current.y, frameRef.current, isMobile)
-        renderNetwork(ctx, networkRef.current, isMobile)
+    const draw = () => {
+      if (!active) return
+      frameRef.current++
+      ctx.clearRect(0, 0, lastW, lastH)
+      updateNetwork(networkRef.current, mouseRef.current.x, mouseRef.current.y, frameRef.current, currentIsMobile)
+      renderNetwork(ctx, networkRef.current, currentIsMobile)
+      animRef.current = requestAnimationFrame(draw)
+    }
+
+    resize()
+    animRef.current = requestAnimationFrame(draw)
+    setTimeout(() => { if (active) setRevealed(true) }, 600)
+
+    /* ResizeObserver catches mobile address bar show/hide and container layout shifts */
+    const ro = new ResizeObserver(() => resize())
+    ro.observe(container)
+
+    /* Re-sync canvas when returning from a background tab or app switch */
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        resize()
+        cancelAnimationFrame(animRef.current)
         animRef.current = requestAnimationFrame(draw)
       }
-
-      animRef.current = requestAnimationFrame(draw)
-      setTimeout(() => { if (active) setRevealed(true) }, 600)
     }
-
-    setup()
-
-    let resizeTimer: ReturnType<typeof setTimeout>
-    const handleResize = () => {
-      clearTimeout(resizeTimer)
-      resizeTimer = setTimeout(() => {
-        cancelAnimationFrame(animRef.current)
-        setRevealed(false)
-        setup()
-      }, 300)
-    }
-
-    window.addEventListener('resize', handleResize)
+    document.addEventListener('visibilitychange', handleVisibility)
 
     return () => {
       active = false
       cancelAnimationFrame(animRef.current)
-      clearTimeout(resizeTimer)
-      window.removeEventListener('resize', handleResize)
+      ro.disconnect()
+      document.removeEventListener('visibilitychange', handleVisibility)
     }
   }, [])
 
@@ -130,7 +142,7 @@ export default function Hero() {
       {/* Identity — clamp()-scaled typography, no breakpoints needed */}
       <div className="pointer-events-none relative z-10 flex flex-col items-center gap-[clamp(0.75rem,2vw,2rem)] px-6">
         <h1
-          className={`text-center font-serif font-semibold leading-[0.95] tracking-tight text-white transition-all duration-1000 text-[clamp(1.75rem,7vw,7.5rem)] ${
+          className={`text-center font-serif font-semibold leading-[0.95] tracking-tight text-[#f0ede6] transition-all duration-1000 text-[clamp(1.75rem,7vw,7.5rem)] ${
             revealed ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
           }`}
         >
@@ -138,7 +150,7 @@ export default function Hero() {
         </h1>
 
         <p
-          className={`max-w-xl text-center font-serif tracking-tight text-white/40 italic transition-all delay-300 duration-1000 text-[clamp(0.8rem,2.5vw,1.625rem)] ${
+          className={`max-w-xl text-center font-serif tracking-tight text-[#f0ede6]/45 italic transition-all delay-300 duration-1000 text-[clamp(0.8rem,2.5vw,1.625rem)] ${
             revealed ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
           }`}
         >
@@ -146,7 +158,7 @@ export default function Hero() {
         </p>
 
         <p
-          className={`text-center font-mono tracking-[0.2em] text-white/20 uppercase transition-all delay-500 duration-1000 text-[clamp(0.45rem,1.2vw,0.85rem)] ${
+          className={`text-center font-mono tracking-[0.2em] text-warm/40 uppercase transition-all delay-500 duration-1000 text-[clamp(0.45rem,1.2vw,0.85rem)] ${
             revealed ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0'
           }`}
         >
@@ -162,7 +174,7 @@ export default function Hero() {
       >
         <button
           onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
-          className="flex flex-col items-center gap-[clamp(0.25rem,0.5vw,0.5rem)] text-white/15 transition-colors hover:text-white/30"
+          className="flex flex-col items-center gap-[clamp(0.25rem,0.5vw,0.5rem)] text-[#f0ede6]/15 transition-colors hover:text-accent/40"
         >
           <span className="font-mono tracking-[0.3em] uppercase text-[clamp(0.4rem,0.8vw,0.6rem)]">Scroll</span>
           <ChevronDown style={{ width: 'clamp(0.75rem, 1.2vw, 1rem)', height: 'clamp(0.75rem, 1.2vw, 1rem)' }} className="animate-bounce" />
