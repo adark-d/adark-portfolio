@@ -46,7 +46,7 @@ function CopyButton({ text }: { text: string }) {
 const markdownComponents = {
   p: ({ children }: { children?: React.ReactNode }) => <p className="mb-2 last:mb-0">{children}</p>,
   strong: ({ children }: { children?: React.ReactNode }) => (
-    <strong className="font-semibold text-white">{children}</strong>
+    <strong className="font-semibold text-accent">{children}</strong>
   ),
   code: ({ children }: { children?: React.ReactNode }) => (
     <code className="rounded bg-accent/10 px-1.5 py-0.5 font-mono text-xs text-accent">
