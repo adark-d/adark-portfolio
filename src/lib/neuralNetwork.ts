@@ -266,8 +266,8 @@ export function renderNetwork(
 ): void {
   const { nodes, edges, numLayers } = network
   const lastLayer = numLayers - 1
-  const fontSize = isMobile ? 7 : 10
-  const labelOffset = isMobile ? 5 : 8
+  const fontSize = isMobile ? 8 : 11
+  const labelOffset = isMobile ? 6 : 10
 
   /* ── Edges + Pulses ────────────────────────────────────────────── */
   for (let e = 0; e < edges.length; e++) {
@@ -332,7 +332,7 @@ export function renderNetwork(
     const act = n.activation
 
     if (n.label) {
-      const alpha = 0.18 + act * 0.35
+      const alpha = 0.4 + act * 0.5
       ctx.font = font
       ctx.textAlign = 'right'
       ctx.fillStyle = act > 0.3
@@ -342,7 +342,7 @@ export function renderNetwork(
     }
 
     if (n.layer === lastLayer) {
-      const alpha = 0.2 + act * 0.45
+      const alpha = 0.4 + act * 0.5
       ctx.font = font
       ctx.textAlign = 'left'
       ctx.fillStyle = act > 0.3
