@@ -39,7 +39,7 @@ export interface Network {
 /* ─── Topology ─────────────────────────────────────────────────────── */
 
 const DESKTOP_LAYERS = { x: [0.08, 0.25, 0.42, 0.58, 0.75, 0.92], nodes: [8, 14, 18, 18, 14, 8] }
-const MOBILE_LAYERS  = { x: [0.08, 0.33, 0.67, 0.92], nodes: [4, 7, 7, 4] }
+const MOBILE_LAYERS  = { x: [0.10, 0.35, 0.65, 0.90], nodes: [4, 7, 7, 4] }
 
 const INPUT_LABELS        = ['text', 'image', 'audio', 'query', 'embed', 'signal', 'tokens', 'sensor']
 const INPUT_LABELS_MOBILE = ['txt', 'img', 'aud', 'qry']
@@ -93,15 +93,18 @@ export function buildNetwork(w: number, h: number, isMobile: boolean): Network {
 
   const verticalPadding = h * (isMobile ? 0.2 : 0.15)
   const usableH = h - verticalPadding * 2
+  const maxCount = Math.max(...layerCounts)
+  const spacing = usableH / (maxCount - 1)
 
   for (let l = 0; l < layerXPcts.length; l++) {
     const count = layerCounts[l]
     const centerX = w * layerXPcts[l]
+    const layerHeight = spacing * (count - 1)
+    const startY = verticalPadding + (usableH - layerHeight) / 2
 
     for (let n = 0; n < count; n++) {
-      const spacing = usableH / (count + 1)
-      const y = verticalPadding + spacing * (n + 1) + (Math.random() - 0.5) * spacing * 0.5
-      const x = centerX + (Math.random() - 0.5) * w * 0.06
+      const y = startY + spacing * n
+      const x = centerX
 
       const isInput  = l === 0
       const isOutput = l === lastLayer
@@ -109,10 +112,10 @@ export function buildNetwork(w: number, h: number, isMobile: boolean): Network {
       nodes.push({
         x, y,
         baseX: x, baseY: y,
-        radius: baseRadius + Math.random() * 1.5,
+        radius: baseRadius,
         layer: l,
         activation: 0,
-        driftPhase: Math.random() * Math.PI * 2,
+        driftPhase: l * Math.PI / layerXPcts.length,
         outEdges: [],
         label: isInput ? labels[n % labels.length] : '',
         outputValue:  isOutput ? Math.random() : 0,
@@ -348,7 +351,7 @@ export function renderNetwork(
       ctx.fillStyle = act > 0.3
         ? `rgba(94, 234, 212, ${alpha})`
         : `rgba(212, 168, 83, ${alpha})`
-      ctx.fillText(n.outputValue.toFixed(3), n.x + n.radius + labelOffset, n.y)
+      ctx.fillText(n.outputValue.toFixed(isMobile ? 2 : 3), n.x + n.radius + labelOffset, n.y)
     }
   }
 }
