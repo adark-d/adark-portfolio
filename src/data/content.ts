@@ -5,7 +5,7 @@ import { PersonalInfo, Experience, Award, TechRadar, Project, CareerStage } from
 export const personalInfo: PersonalInfo = {
   name: 'Dave',
   fullName: 'David Adarkwah',
-  role: 'AI & Data Architect',
+  role: 'AI & Data Engineer',
   location: 'London, UK',
   heritage: 'Ghanaian',
   email: 'davidwyse48@gmail.com',
@@ -13,7 +13,7 @@ export const personalInfo: PersonalInfo = {
   linkedin: 'https://www.linkedin.com/in/d-adark/',
   cv: '/david-cv.pdf',
   calendly: 'https://calendly.com/d-adark/30min',
-  tagline: 'Engineering the Architecture of Intelligence.',
+  tagline: 'From raw data to autonomous action. I build the infrastructure in between.',
   subTagline:
     'I build fault-tolerant data pipelines, production MLOps platforms, and multi-agent systems that bridge the gap between chaotic data and autonomous action.',
   philosophy:
