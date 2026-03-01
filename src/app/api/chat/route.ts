@@ -3,7 +3,7 @@ import Groq from 'groq-sdk'
 import { buildSystemPrompt } from '@/lib/systemPrompt'
 import { checkRateLimit } from '@/lib/rateLimit'
 import { MAX_MESSAGE_LENGTH } from '@/config/chat'
-import { MAX_MESSAGES, MAX_TOKENS, MODEL, TEMPERATURE } from '@/config/chat.server'
+import { MAX_MESSAGES, MAX_TOKENS, MODEL, FALLBACK_MODEL, TEMPERATURE } from '@/config/chat.server'
 
 const ALLOWED_ORIGINS = [
   'https://dadark.dev',
@@ -85,33 +85,48 @@ export async function POST(request: Request) {
 
     const recentMessages = messages.slice(-MAX_MESSAGES)
     const systemPrompt = await buildSystemPrompt()
+    const chatMessages = [{ role: 'system' as const, content: systemPrompt }, ...recentMessages]
 
-    /* ── Stream from Groq ──────────────────────────────────────────── */
+    /* ── Stream from Groq (primary → fallback on rate limit) ───────── */
 
-    const stream = await groq.chat.completions.create({
-      model: MODEL,
-      messages: [{ role: 'system', content: systemPrompt }, ...recentMessages],
-      temperature: TEMPERATURE,
-      max_tokens: MAX_TOKENS,
-      stream: true,
-    })
+    const streamResponse = async (model: string) => {
+      const stream = await groq.chat.completions.create({
+        model,
+        messages: chatMessages,
+        temperature: TEMPERATURE,
+        max_tokens: MAX_TOKENS,
+        stream: true,
+      })
 
-    const encoder = new TextEncoder()
-    const readableStream = new ReadableStream({
-      async start(controller) {
-        try {
-          for await (const chunk of stream) {
-            const content = chunk.choices[0]?.delta?.content
-            if (content) {
-              controller.enqueue(encoder.encode(content))
+      const encoder = new TextEncoder()
+      return new ReadableStream({
+        async start(controller) {
+          try {
+            for await (const chunk of stream) {
+              const content = chunk.choices[0]?.delta?.content
+              if (content) {
+                controller.enqueue(encoder.encode(content))
+              }
             }
+            controller.close()
+          } catch {
+            controller.error(new Error('Stream interrupted'))
           }
-          controller.close()
-        } catch {
-          controller.error(new Error('Stream interrupted'))
-        }
-      },
-    })
+        },
+      })
+    }
+
+    let readableStream: ReadableStream
+    try {
+      readableStream = await streamResponse(MODEL)
+    } catch (err) {
+      const status = (err as { status?: number }).status
+      if (status === 429 || status === 503) {
+        readableStream = await streamResponse(FALLBACK_MODEL)
+      } else {
+        throw err
+      }
+    }
 
     return new Response(readableStream, {
       headers: {
