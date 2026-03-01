@@ -49,7 +49,7 @@ const markdownComponents = {
     <strong className="font-semibold text-white">{children}</strong>
   ),
   code: ({ children }: { children?: React.ReactNode }) => (
-    <code className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-xs text-cyan-400">
+    <code className="rounded bg-accent/10 px-1.5 py-0.5 font-mono text-xs text-accent">
       {children}
     </code>
   ),
@@ -65,7 +65,7 @@ const markdownComponents = {
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="text-cyan-400 underline underline-offset-2 hover:text-cyan-300"
+      className="text-accent underline underline-offset-2 hover:text-accent/80"
     >
       {children}
     </a>
@@ -155,20 +155,20 @@ export default function ChatDrawer() {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={DRAWER_SPRING}
-            className="fixed top-0 right-0 z-50 flex h-full w-full flex-col border-l border-white/10 bg-[#0a0a0a]/95 backdrop-blur-xl md:w-[420px]"
+            className="fixed top-0 right-0 z-50 flex h-full w-full flex-col border-l border-[#f0ede6]/8 bg-[#0b0d17]/95 backdrop-blur-xl md:w-[420px]"
           >
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
+            <div className="flex items-center justify-between border-b border-[#f0ede6]/8 px-6 py-4">
               <div className="flex items-center gap-3">
                 <div className="relative">
                   <img src="/favicon.svg" alt="" className="h-5 w-5 rounded-sm" />
-                  <div className="absolute -top-0.5 -right-0.5 h-2 w-2 animate-pulse rounded-full bg-cyan-400" />
+                  <div className="absolute -top-0.5 -right-0.5 h-2 w-2 animate-pulse rounded-full bg-accent" />
                 </div>
                 <div>
-                  <span className="font-mono text-xs tracking-widest text-white/80 uppercase">
+                  <span className="font-mono text-xs tracking-widest text-[#f0ede6]/80 uppercase">
                     adarkwah.ai
                   </span>
-                  <span className="ml-3 font-mono text-[10px] tracking-widest text-cyan-400/60">
+                  <span className="ml-3 font-mono text-[10px] tracking-widest text-accent/60">
                     {isStreaming ? 'processing...' : 'online'}
                   </span>
                 </div>
@@ -197,10 +197,10 @@ export default function ChatDrawer() {
               {messages.length === 0 ? (
                 /* ── Empty State ──────────────────────────────────────── */
                 <div className="flex h-full flex-col items-center justify-center">
-                  <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-white/10 bg-white/5">
+                  <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-[#f0ede6]/8 bg-[#f0ede6]/5">
                     <img src="/favicon.svg" alt="" className="h-8 w-8 rounded-sm" />
                   </div>
-                  <p className="mb-8 max-w-[280px] text-center text-sm font-light text-white/40">
+                  <p className="mb-8 max-w-[280px] text-center text-sm font-light text-[#f0ede6]/40">
                     Ask me anything about David&apos;s experience, projects, or technical
                     expertise.
                   </p>
@@ -209,7 +209,7 @@ export default function ChatDrawer() {
                       <button
                         key={i}
                         onClick={() => sendMessage(q)}
-                        className="rounded-lg border border-white/5 bg-white/[0.02] px-4 py-3 text-left text-sm text-white/50 transition-all hover:border-white/10 hover:bg-white/[0.04] hover:text-white/70"
+                        className="rounded-lg border border-[#f0ede6]/5 bg-[#f0ede6]/[0.02] px-4 py-3 text-left text-sm text-[#f0ede6]/45 transition-all hover:border-accent/15 hover:bg-accent/[0.04] hover:text-[#f0ede6]/70"
                       >
                         {q}
                       </button>
@@ -227,22 +227,22 @@ export default function ChatDrawer() {
                       <div
                         className={`group relative max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                           message.role === 'user'
-                            ? 'bg-white/10 text-white'
-                            : 'border border-white/5 bg-white/[0.03] text-white/80'
+                            ? 'bg-[#f0ede6]/10 text-[#f0ede6]'
+                            : 'border border-[#f0ede6]/6 bg-[#f0ede6]/[0.03] text-[#f0ede6]/80'
                         }`}
                       >
                         {message.role === 'assistant' && !message.content && isStreaming ? (
                           <div className="flex gap-1">
                             <span
-                              className="h-1.5 w-1.5 animate-bounce rounded-full bg-cyan-400/60"
+                              className="h-1.5 w-1.5 animate-bounce rounded-full bg-accent/60"
                               style={{ animationDelay: '0ms' }}
                             />
                             <span
-                              className="h-1.5 w-1.5 animate-bounce rounded-full bg-cyan-400/60"
+                              className="h-1.5 w-1.5 animate-bounce rounded-full bg-accent/60"
                               style={{ animationDelay: '150ms' }}
                             />
                             <span
-                              className="h-1.5 w-1.5 animate-bounce rounded-full bg-cyan-400/60"
+                              className="h-1.5 w-1.5 animate-bounce rounded-full bg-accent/60"
                               style={{ animationDelay: '300ms' }}
                             />
                           </div>
@@ -273,9 +273,9 @@ export default function ChatDrawer() {
             </div>
 
             {/* Input */}
-            <div className="border-t border-white/10 px-4 py-4">
-              <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 transition-colors focus-within:border-white/20">
-                <span className="font-mono text-xs text-cyan-400/50">~</span>
+            <div className="border-t border-[#f0ede6]/8 px-4 py-4">
+              <div className="flex items-center gap-2 rounded-xl border border-[#f0ede6]/10 bg-[#f0ede6]/[0.03] px-4 py-2 transition-colors focus-within:border-accent/30">
+                <span className="font-mono text-xs text-accent/50">~</span>
                 <input
                   ref={inputRef}
                   type="text"
@@ -298,7 +298,7 @@ export default function ChatDrawer() {
                   )}
                 </button>
               </div>
-              <p className="mt-2 text-center font-mono text-[9px] tracking-wider text-white/15">
+              <p className="mt-2 text-center font-mono text-[9px] tracking-wider text-[#f0ede6]/12">
                 Powered by Groq inference
               </p>
             </div>
