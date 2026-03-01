@@ -32,7 +32,7 @@ export default function Navbar() {
     <>
       {/* ── Full-Screen Mobile Menu Overlay ────────────────────────────── */}
       <div
-        className={`fixed inset-0 z-[60] flex flex-col justify-center bg-[#050505]/95 px-12 backdrop-blur-3xl transition-all duration-700 ${
+        className={`fixed inset-0 z-[60] flex flex-col justify-center bg-[#060810]/95 px-12 backdrop-blur-3xl transition-all duration-700 ${
           isMobileMenuOpen
             ? 'pointer-events-auto opacity-100'
             : 'pointer-events-none opacity-0'
@@ -49,14 +49,14 @@ export default function Navbar() {
             <button
               key={nav.id}
               onClick={() => { setIsMobileMenuOpen(false); scrollTo(nav.id) }}
-              className={`transform text-left font-serif text-3xl text-white transition-all duration-500 hover:text-cyan-400 md:text-6xl ${
+              className={`transform text-left font-serif text-3xl text-white transition-all duration-500 hover:text-accent md:text-6xl ${
                 isMobileMenuOpen
                   ? 'translate-y-0 opacity-100'
                   : 'translate-y-12 opacity-0'
               }`}
               style={{ transitionDelay: `${i * 100 + 100}ms` }}
             >
-              <span className="mr-4 mb-2 block font-mono text-xs tracking-widest text-cyan-500/50 uppercase">
+              <span className="mr-4 mb-2 block font-mono text-xs tracking-widest text-warm/50 uppercase">
                 {nav.index}
               </span>
               <span className="capitalize">{nav.label}</span>
@@ -69,16 +69,16 @@ export default function Navbar() {
               isMobileMenuOpen
                 ? 'translate-y-0 opacity-100'
                 : 'translate-y-12 opacity-0'
-            } ${isOpen ? 'text-cyan-400' : 'text-white hover:text-cyan-400'}`}
+            } ${isOpen ? 'text-accent' : 'text-white hover:text-accent'}`}
             style={{ transitionDelay: `${NAV_ITEMS.length * 100 + 100}ms` }}
           >
-            <span className="mr-4 mb-2 block font-mono text-xs tracking-widest text-cyan-500/50 uppercase">
+            <span className="mr-4 mb-2 block font-mono text-xs tracking-widest text-warm/50 uppercase">
               06
             </span>
             <span className="relative">
               AI Assistant
-              <span className="ml-3 inline-block h-2 w-2 rounded-full bg-cyan-400">
-                <span className="absolute inline-flex h-2 w-2 animate-ping rounded-full bg-cyan-400 opacity-75" />
+              <span className="ml-3 inline-block h-2 w-2 rounded-full bg-accent">
+                <span className="absolute inline-flex h-2 w-2 animate-ping rounded-full bg-accent opacity-75" />
               </span>
             </span>
           </button>
@@ -89,8 +89,8 @@ export default function Navbar() {
       <nav
         className={`fixed z-50 flex items-center justify-center overflow-hidden transition-all duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
           isScrolled
-            ? 'top-0 left-0 h-16 w-full translate-x-0 rounded-none border-b border-white/10 bg-black/20 shadow-[0_10px_40px_rgba(0,0,0,0.5)] saturate-[1.5] backdrop-blur-2xl md:h-20'
-            : 'top-6 left-1/2 h-12 w-[240px] -translate-x-1/2 rounded-full border border-white/10 bg-[#0a0a0a]/80 backdrop-blur-xl md:top-8 md:h-14 md:w-[280px] md:hover:w-[calc(100vw-6rem)] lg:hover:w-[calc(100vw-12rem)] md:hover:max-w-[1400px]'
+            ? 'top-0 left-0 h-16 w-full translate-x-0 rounded-none border-b border-[#f0ede6]/8 bg-[#060810]/80 shadow-[0_10px_40px_rgba(0,0,0,0.5)] saturate-[1.5] backdrop-blur-2xl md:h-20'
+            : 'top-6 left-1/2 h-12 w-[240px] -translate-x-1/2 rounded-full border border-[#f0ede6]/8 bg-[#0b0d17]/80 backdrop-blur-xl md:top-8 md:h-14 md:w-[280px] md:hover:w-[calc(100vw-6rem)] lg:hover:w-[calc(100vw-12rem)] md:hover:max-w-[1400px]'
         } group cursor-pointer md:cursor-default`}
         onClick={() => {
           if (!isScrolled && window.innerWidth < 768) setIsMobileMenuOpen(true)
@@ -104,7 +104,7 @@ export default function Navbar() {
               : 'md:group-hover:pointer-events-none md:group-hover:scale-90 md:group-hover:opacity-0'
           }`}
         >
-          <div className="h-1.5 w-1.5 animate-[pulse_2s_ease-in-out_infinite] rounded-full bg-cyan-400 shadow-[0_0_10px_#22d3ee]" />
+          <div className="h-1.5 w-1.5 animate-[pulse_2s_ease-in-out_infinite] rounded-full bg-accent shadow-[0_0_10px_rgba(94,234,212,0.6)]" />
           <span className="flex items-center gap-2 font-mono text-[10px] tracking-widest whitespace-nowrap text-white/60 uppercase md:text-xs">
             {activeSectionObj.id !== 'origin' && (
               <>
@@ -133,7 +133,7 @@ export default function Navbar() {
             Adarkwah.
           </span>
 
-          <div className="hidden items-center gap-1 rounded-full border border-white/5 bg-white/[0.03] p-1.5 shadow-inner md:flex">
+          <div className="hidden items-center gap-1 rounded-full border border-[#f0ede6]/6 bg-[#0b0d17]/60 p-1.5 shadow-inner md:flex">
             {NAV_ITEMS.map((nav) => (
               <button
                 key={nav.id}
@@ -141,7 +141,7 @@ export default function Navbar() {
                 className={`rounded-full px-5 py-2 font-mono text-[10px] tracking-widest uppercase transition-all duration-300 ${
                   activeSection === nav.id
                     ? 'bg-white font-bold text-black shadow-[0_0_20px_rgba(255,255,255,0.2)]'
-                    : 'text-white/40 hover:bg-white/10 hover:text-white'
+                    : 'text-[#f0ede6]/40 hover:bg-[#f0ede6]/8 hover:text-[#f0ede6]'
                 }`}
               >
                 {nav.short}
@@ -151,13 +151,13 @@ export default function Navbar() {
               onClick={toggle}
               className={`relative rounded-full px-5 py-2 font-mono text-[10px] tracking-widest uppercase transition-all duration-300 ${
                 isOpen
-                  ? 'bg-cyan-400/10 text-cyan-400'
-                  : 'text-white/40 hover:bg-white/10 hover:text-white'
+                  ? 'bg-accent/10 text-accent'
+                  : 'text-[#f0ede6]/40 hover:bg-[#f0ede6]/8 hover:text-[#f0ede6]'
               }`}
             >
               ai
-              <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-cyan-400">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75" />
+              <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-accent">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
               </span>
             </button>
           </div>
@@ -168,7 +168,7 @@ export default function Navbar() {
                 href={personalInfo.linkedin}
                 target="_blank"
                 rel="noreferrer"
-                className="text-white/30 transition-colors hover:text-cyan-400"
+                className="text-white/30 transition-colors hover:text-accent"
               >
                 <Linkedin className="h-4 w-4" />
               </a>
@@ -176,7 +176,7 @@ export default function Navbar() {
                 href={personalInfo.github}
                 target="_blank"
                 rel="noreferrer"
-                className="text-white/30 transition-colors hover:text-cyan-400"
+                className="text-white/30 transition-colors hover:text-accent"
               >
                 <Github className="h-4 w-4" />
               </a>

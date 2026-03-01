@@ -276,13 +276,13 @@ export function renderNetwork(
     const b = nodes[edge.to]
 
     const maxAct = Math.max(a.activation, b.activation)
-    const baseAlpha = 0.03 + maxAct * 0.08
+    const baseAlpha = 0.04 + maxAct * 0.12
 
     ctx.beginPath()
     ctx.moveTo(a.x, a.y)
     ctx.lineTo(b.x, b.y)
     ctx.strokeStyle = maxAct > 0.3
-      ? `rgba(34, 211, 238, ${baseAlpha})`
+      ? `rgba(94, 234, 212, ${baseAlpha})`
       : `rgba(255, 255, 255, ${baseAlpha})`
     ctx.lineWidth = 0.5 + maxAct * 0.5
     ctx.stroke()
@@ -293,12 +293,12 @@ export function renderNetwork(
 
       ctx.beginPath()
       ctx.arc(px, py, 6, 0, Math.PI * 2)
-      ctx.fillStyle = `rgba(34, 211, 238, ${pulse.energy * 0.12})`
+      ctx.fillStyle = `rgba(94, 234, 212, ${pulse.energy * 0.12})`
       ctx.fill()
 
       ctx.beginPath()
       ctx.arc(px, py, 1.8, 0, Math.PI * 2)
-      ctx.fillStyle = `rgba(34, 211, 238, ${pulse.energy * 0.9})`
+      ctx.fillStyle = `rgba(94, 234, 212, ${pulse.energy * 0.9})`
       ctx.fill()
     }
   }
@@ -311,15 +311,15 @@ export function renderNetwork(
     if (act > 0.15) {
       ctx.beginPath()
       ctx.arc(n.x, n.y, n.radius + 8 * act, 0, Math.PI * 2)
-      ctx.fillStyle = `rgba(34, 211, 238, ${act * 0.08})`
+      ctx.fillStyle = `rgba(94, 234, 212, ${act * 0.08})`
       ctx.fill()
     }
 
     ctx.beginPath()
     ctx.arc(n.x, n.y, n.radius + act * 1.5, 0, Math.PI * 2)
     ctx.fillStyle = act > 0.3
-      ? `rgba(34, 211, 238, ${0.3 + act * 0.7})`
-      : `rgba(255, 255, 255, ${0.08 + act * 0.4})`
+      ? `rgba(94, 234, 212, ${0.3 + act * 0.7})`
+      : `rgba(240, 237, 230, ${0.10 + act * 0.5})`
     ctx.fill()
   }
 
@@ -336,8 +336,8 @@ export function renderNetwork(
       ctx.font = font
       ctx.textAlign = 'right'
       ctx.fillStyle = act > 0.3
-        ? `rgba(34, 211, 238, ${alpha})`
-        : `rgba(255, 255, 255, ${alpha})`
+        ? `rgba(94, 234, 212, ${alpha})`
+        : `rgba(212, 168, 83, ${alpha})`
       ctx.fillText(n.label, n.x - n.radius - labelOffset, n.y)
     }
 
@@ -346,8 +346,8 @@ export function renderNetwork(
       ctx.font = font
       ctx.textAlign = 'left'
       ctx.fillStyle = act > 0.3
-        ? `rgba(34, 211, 238, ${alpha})`
-        : `rgba(255, 255, 255, ${alpha})`
+        ? `rgba(94, 234, 212, ${alpha})`
+        : `rgba(212, 168, 83, ${alpha})`
       ctx.fillText(n.outputValue.toFixed(3), n.x + n.radius + labelOffset, n.y)
     }
   }
