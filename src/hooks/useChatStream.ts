@@ -69,20 +69,53 @@ export function useChatStream() {
       if (!reader) throw new Error('No response stream')
 
       const decoder = new TextDecoder()
-      let accumulated = ''
+      let buffer = ''       // raw text received from API
+      let displayed = ''    // text currently shown in UI
+      let streamDone = false
 
+      // Drip characters from buffer to UI at a readable pace
+      const CHARS_PER_TICK = 3
+      const TICK_MS = 16
+
+      const drip = (): Promise<void> =>
+        new Promise((resolve) => {
+          const tick = () => {
+            if (displayed.length >= buffer.length && streamDone) {
+              // Final flush
+              setMessages((prev) =>
+                prev.map((m) =>
+                  m.id === assistantMessage.id ? { ...m, content: buffer } : m
+                )
+              )
+              resolve()
+              return
+            }
+
+            const end = Math.min(displayed.length + CHARS_PER_TICK, buffer.length)
+            displayed = buffer.slice(0, end)
+
+            setMessages((prev) =>
+              prev.map((m) =>
+                m.id === assistantMessage.id ? { ...m, content: displayed } : m
+              )
+            )
+
+            setTimeout(tick, TICK_MS)
+          }
+          tick()
+        })
+
+      const dripPromise = drip()
+
+      // Fill buffer from API stream
       while (true) {
         const { done, value } = await reader.read()
         if (done) break
-
-        accumulated += decoder.decode(value, { stream: true })
-
-        setMessages((prev) =>
-          prev.map((m) =>
-            m.id === assistantMessage.id ? { ...m, content: accumulated } : m
-          )
-        )
+        buffer += decoder.decode(value, { stream: true })
       }
+
+      streamDone = true
+      await dripPromise
     } catch (err) {
       if (err instanceof Error && err.name === 'AbortError') return
 
