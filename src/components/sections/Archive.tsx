@@ -83,27 +83,27 @@ export default function Archive() {
   return (
     <section
       id="projects"
-      className="relative z-20 border-t border-white/10 bg-[#050505] py-20 md:py-32"
+      className="relative z-20 border-t border-[#f0ede6]/6 bg-surface py-20 md:py-32"
     >
       <div className="mx-auto max-w-[1400px] px-6 md:px-12 lg:px-24">
         {/* Header & Filters */}
         <div className="mb-12 flex flex-col items-start justify-between gap-6 md:mb-20 md:gap-8 lg:flex-row lg:items-end">
           <div>
-            <h2 className="mb-4 flex items-center gap-3 font-mono text-sm tracking-[0.2em] text-white/50 uppercase md:mb-6">
+            <h2 className="mb-4 flex items-center gap-3 font-mono text-sm tracking-[0.2em] text-[#f0ede6]/40 uppercase md:mb-6">
               <Database className="h-4 w-4" /> Projects
             </h2>
-            <h3 className="font-serif text-3xl tracking-tight text-white md:text-6xl">
+            <h3 className="font-serif text-3xl tracking-tight text-[#f0ede6] md:text-6xl">
               Selected Work.
             </h3>
           </div>
 
-          <div className="hide-scroll flex w-full max-w-full gap-1 overflow-x-auto rounded-full border border-white/10 bg-[#0a0a0a] p-1 font-mono text-xs tracking-widest uppercase md:w-auto md:gap-2">
+          <div className="hide-scroll flex w-full max-w-full gap-1 overflow-x-auto rounded-full border border-[#f0ede6]/8 bg-elevated p-1 font-mono text-xs tracking-widest uppercase md:w-auto md:gap-2">
             {FILTERS.map((f) => (
               <button
                 key={f}
                 onClick={() => handleFilterChange(f)}
                 className={`rounded-full px-4 py-2.5 whitespace-nowrap transition-all md:px-6 md:py-3 ${
-                  filter === f ? 'bg-white font-bold text-black' : 'text-white/50 hover:text-white'
+                  filter === f ? 'bg-white font-bold text-black' : 'text-[#f0ede6]/40 hover:text-[#f0ede6]'
                 }`}
               >
                 {f}
@@ -114,7 +114,7 @@ export default function Archive() {
 
         {/* Project List */}
         <div ref={listRef} className="flex w-full flex-col" style={{ minHeight: listMinHeight }}>
-          <div className="hidden grid-cols-12 gap-6 border-b border-white/20 pb-6 font-mono text-xs tracking-widest text-white/40 uppercase md:grid">
+          <div className="hidden grid-cols-12 gap-6 border-b border-[#f0ede6]/12 pb-6 font-mono text-xs tracking-widest text-warm/40 uppercase md:grid">
             <div className="col-span-5 pl-4">Title / Designation</div>
             <div className="col-span-4">Category</div>
             <div className="col-span-2">Year</div>
@@ -125,22 +125,22 @@ export default function Archive() {
             const isExpanded = expandedId === item.id
 
             return (
-              <div key={item.id} className="group border-b border-white/10">
+              <div key={item.id} className="group border-b border-[#f0ede6]/6">
                 <div
                   onClick={() => setExpandedId(isExpanded ? null : item.id)}
-                  className="grid cursor-pointer grid-cols-1 items-center gap-3 px-3 py-5 transition-colors hover:bg-white/[0.02] md:grid-cols-12 md:gap-6 md:px-4 md:py-6"
+                  className="grid cursor-pointer grid-cols-1 items-center gap-3 px-3 py-5 transition-colors hover:bg-[#f0ede6]/[0.03] md:grid-cols-12 md:gap-6 md:px-4 md:py-6"
                 >
                   <div className="col-span-12 flex flex-col justify-center md:col-span-5 md:pr-6">
                     <h4
                       className={`font-serif text-lg leading-snug tracking-tight transition-all duration-300 md:text-2xl ${
                         isExpanded
-                          ? 'text-white'
-                          : 'text-white/70 group-hover:translate-x-2 group-hover:text-white'
+                          ? 'text-[#f0ede6]'
+                          : 'text-[#f0ede6]/65 group-hover:translate-x-2 group-hover:text-[#f0ede6]'
                       }`}
                     >
                       {item.title}
                     </h4>
-                    <p className="mt-1 line-clamp-1 text-sm font-light text-white/40 md:hidden">
+                    <p className="mt-1 line-clamp-1 text-sm font-light text-[#f0ede6]/40 md:hidden">
                       {item.description}
                     </p>
                   </div>
@@ -149,8 +149,8 @@ export default function Archive() {
                     <span
                       className={`flex items-center gap-2 rounded-full border px-3 py-1 font-mono text-xs transition-colors md:text-sm ${
                         isExpanded
-                          ? 'border-white/20 bg-white/10 text-white'
-                          : 'border-white/5 bg-transparent text-white/50 group-hover:border-white/20'
+                          ? 'border-accent/25 bg-accent/10 text-accent'
+                          : 'border-[#f0ede6]/6 bg-transparent text-[#f0ede6]/45 group-hover:border-accent/20'
                       }`}
                     >
                       {item.type === 'System' && <Terminal className="h-3 w-3" />}
@@ -161,15 +161,15 @@ export default function Archive() {
                   </div>
 
                   <div className="col-span-6 flex items-center justify-end pt-2 font-mono text-sm md:col-span-2 md:justify-start md:pt-0">
-                    <span className={isExpanded ? 'text-white' : 'text-white/40'}>{item.year}</span>
+                    <span className={isExpanded ? 'text-[#f0ede6]' : 'text-[#f0ede6]/35'}>{item.year}</span>
                   </div>
 
                   <div className="hidden items-center justify-end md:col-span-1 md:flex">
                     <div
                       className={`flex h-8 w-8 items-center justify-center rounded-full border transition-all duration-500 ${
                         isExpanded
-                          ? 'rotate-45 border-white bg-white text-black'
-                          : 'border-white/10 text-white/50 group-hover:border-white/30 group-hover:text-white'
+                          ? 'rotate-45 border-accent bg-accent text-[#060810]'
+                          : 'border-[#f0ede6]/10 text-[#f0ede6]/40 group-hover:border-accent/30 group-hover:text-accent'
                       }`}
                     >
                       <X
@@ -189,11 +189,11 @@ export default function Archive() {
                 >
                   <div className="overflow-hidden">
                     <div
-                      className={`mx-2 mb-2 mt-0 flex flex-col gap-6 rounded-2xl border border-white/5 bg-[#0a0a0a] p-4 transition-all duration-1000 md:m-4 md:mt-0 md:gap-8 md:p-8 lg:flex-row ${
+                      className={`mx-2 mb-2 mt-0 flex flex-col gap-6 rounded-2xl border border-[#f0ede6]/6 bg-elevated p-4 transition-all duration-1000 md:m-4 md:mt-0 md:gap-8 md:p-8 lg:flex-row ${
                         isExpanded ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0'
                       }`}
                     >
-                      <div className="relative h-44 w-full overflow-hidden rounded-xl bg-black md:h-80 lg:w-5/12">
+                      <div className="relative h-44 w-full overflow-hidden rounded-xl border border-[#f0ede6]/6 bg-[#060810] md:h-80 lg:w-5/12">
                         <img
                           src={item.image}
                           alt={item.title}
@@ -203,7 +203,7 @@ export default function Archive() {
                               ? 'blur(0px) grayscale(0%) contrast(1.1)'
                               : 'blur(20px) grayscale(100%) contrast(1.5)',
                             transform: isExpanded ? 'scale(1)' : 'scale(1.2)',
-                            opacity: isExpanded ? 0.9 : 0.2,
+                            opacity: isExpanded ? 0.95 : 0.3,
                           }}
                         />
                       </div>
@@ -214,10 +214,10 @@ export default function Archive() {
                             isExpanded ? 'translate-x-0 opacity-100' : 'translate-x-8 opacity-0'
                           }`}
                         >
-                          <h5 className="mb-4 border-b border-white/10 pb-2 font-mono text-sm tracking-widest text-white/40 uppercase">
+                          <h5 className="mb-4 border-b border-[#f0ede6]/8 pb-2 font-mono text-sm tracking-widest text-warm/50 uppercase">
                             Overview
                           </h5>
-                          <p className="mb-6 text-sm leading-relaxed font-light text-white/80 md:mb-8 md:text-xl">
+                          <p className="mb-6 text-sm leading-relaxed font-light text-[#f0ede6]/80 md:mb-8 md:text-xl">
                             {item.details?.problem || item.description}
                           </p>
                         </div>
@@ -230,7 +230,7 @@ export default function Archive() {
                           {item.stack.map((tech, i) => (
                             <span
                               key={i}
-                              className="rounded-sm border border-white/10 bg-white/5 px-3 py-1.5 font-mono text-[10px] tracking-widest text-white/60 uppercase"
+                              className="rounded-sm border border-warm/15 bg-warm/8 px-3 py-1.5 font-mono text-[10px] tracking-widest text-warm/70 uppercase"
                             >
                               {tech}
                             </span>
@@ -243,11 +243,11 @@ export default function Archive() {
                           }`}
                         >
                           {item.type === 'System' ? (
-                            <button className="flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-xs font-bold tracking-wider text-black uppercase transition-transform hover:scale-105 md:px-6 md:py-3 md:text-sm md:tracking-widest">
+                            <button className="flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-xs font-bold tracking-wider text-[#060810] uppercase shadow-[0_0_20px_rgba(94,234,212,0.2)] transition-transform hover:scale-105 md:px-6 md:py-3 md:text-sm md:tracking-widest">
                               Deep Dive <ArrowRight className="h-4 w-4" />
                             </button>
                           ) : (
-                            <button className="flex items-center gap-2 rounded-full border border-white/20 px-5 py-2.5 text-xs font-bold tracking-wider text-white uppercase transition-colors hover:bg-white/10 md:px-6 md:py-3 md:text-sm md:tracking-widest">
+                            <button className="flex items-center gap-2 rounded-full border border-[#f0ede6]/15 px-5 py-2.5 text-xs font-bold tracking-wider text-[#f0ede6] uppercase transition-colors hover:bg-[#f0ede6]/8 md:px-6 md:py-3 md:text-sm md:tracking-widest">
                               View Material <ExternalLink className="h-4 w-4" />
                             </button>
                           )}
@@ -275,7 +275,7 @@ export default function Archive() {
                 setExpandedId(null)
               }}
               disabled={currentPage === 1}
-              className="rounded-full border border-white/10 bg-[#0a0a0a] p-3 text-white/50 transition-colors hover:bg-white/10 hover:text-white active:scale-90 disabled:pointer-events-none disabled:opacity-30"
+              className="rounded-full border border-[#f0ede6]/10 bg-elevated p-3 text-[#f0ede6]/50 transition-colors hover:bg-raised hover:text-[#f0ede6] active:scale-90 disabled:pointer-events-none disabled:opacity-30"
             >
               <ChevronLeft className="h-5 w-5" />
             </button>
@@ -285,7 +285,7 @@ export default function Archive() {
                 setExpandedId(null)
               }}
               disabled={currentPage === totalPages}
-              className="rounded-full border border-white/10 bg-[#0a0a0a] p-3 text-white/50 transition-colors hover:bg-white/10 hover:text-white active:scale-90 disabled:pointer-events-none disabled:opacity-30"
+              className="rounded-full border border-[#f0ede6]/10 bg-elevated p-3 text-[#f0ede6]/50 transition-colors hover:bg-raised hover:text-[#f0ede6] active:scale-90 disabled:pointer-events-none disabled:opacity-30"
             >
               <ChevronRight className="h-5 w-5" />
             </button>
