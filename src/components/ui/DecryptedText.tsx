@@ -72,7 +72,7 @@ export default function DecryptedText({
       <span className="invisible break-words whitespace-pre-wrap">{text}</span>
       <span
         ref={spanRef}
-        className="absolute top-0 left-0 h-full w-full overflow-hidden break-words whitespace-pre-wrap"
+        className="absolute top-0 left-0 h-full w-full break-words whitespace-pre-wrap"
         aria-hidden="true"
       >
         {text

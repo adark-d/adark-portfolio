@@ -105,14 +105,8 @@ export default function Navbar() {
           }`}
         >
           <div className="h-1.5 w-1.5 animate-[pulse_2s_ease-in-out_infinite] rounded-full bg-accent shadow-[0_0_10px_rgba(94,234,212,0.6)]" />
-          <span className="flex items-center gap-2 font-mono text-[10px] tracking-widest whitespace-nowrap text-white/60 uppercase md:text-xs">
-            {activeSectionObj.id !== 'origin' && (
-              <>
-                <span className="text-white/30">{activeSectionObj.index}</span>
-                <span className="text-white/20">//</span>
-              </>
-            )}
-            <span className="text-white">{activeSectionObj.label}</span>
+          <span className="font-mono text-[10px] tracking-widest whitespace-nowrap text-white uppercase md:text-xs">
+            {activeSectionObj.label}
           </span>
           {/* Mobile hamburger hint */}
           <div className="ml-2 flex flex-col gap-[3px] opacity-50 md:hidden">

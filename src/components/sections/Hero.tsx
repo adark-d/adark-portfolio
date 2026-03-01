@@ -43,19 +43,28 @@ export default function Hero() {
     const ctx = canvas.getContext('2d')!
     const dpr = window.devicePixelRatio || 1
 
-    /* Track the last known container size to detect real changes */
     let lastW = 0
     let lastH = 0
     let currentIsMobile = window.innerWidth < 768
+    let visible = true
 
-    const resize = () => {
-      if (!active) return
-
-      const rect = container.getBoundingClientRect()
-      const w = Math.round(rect.width)
-      const h = Math.round(rect.height)
-
-      if (w === 0 || h === 0) return
+    /**
+     * Sync the canvas pixel-buffer to the container's layout dimensions.
+     *
+     * IMPORTANT — the parent <section> applies 3D scroll transforms
+     * (perspective, translateZ, rotateX, scale). getBoundingClientRect()
+     * returns the screen-projected rect *after* those transforms, so it
+     * would produce corrupted dimensions whenever this runs mid-scroll.
+     * offsetWidth / offsetHeight and ResizeObserver.contentRect both
+     * report the element's own CSS layout box, which is transform-immune.
+     *
+     * The canvas display size is handled entirely by CSS `absolute inset-0`
+     * (stretches to fill the container). We only set the buffer dimensions
+     * here — no inline style.width / style.height, which would overconstrain
+     * the layout and pin the canvas to whatever JS last wrote.
+     */
+    const syncBuffer = (w: number, h: number) => {
+      if (!active || w === 0 || h === 0) return
       if (w === lastW && h === lastH) return
 
       lastW = w
@@ -64,8 +73,6 @@ export default function Hero() {
 
       canvas.width = w * dpr
       canvas.height = h * dpr
-      canvas.style.width = `${w}px`
-      canvas.style.height = `${h}px`
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 
       networkRef.current = buildNetwork(w, h, currentIsMobile)
@@ -73,7 +80,7 @@ export default function Hero() {
     }
 
     const draw = () => {
-      if (!active) return
+      if (!active || !visible) return
       frameRef.current++
       ctx.clearRect(0, 0, lastW, lastH)
       updateNetwork(networkRef.current, mouseRef.current.x, mouseRef.current.y, frameRef.current, currentIsMobile)
@@ -81,18 +88,34 @@ export default function Hero() {
       animRef.current = requestAnimationFrame(draw)
     }
 
-    resize()
+    syncBuffer(container.offsetWidth, container.offsetHeight)
     animRef.current = requestAnimationFrame(draw)
     setTimeout(() => { if (active) setRevealed(true) }, 600)
 
-    /* ResizeObserver catches mobile address bar show/hide and container layout shifts */
-    const ro = new ResizeObserver(() => resize())
+    /* ResizeObserver — use entry.contentRect (transform-immune layout box) */
+    const ro = new ResizeObserver((entries) => {
+      const { width, height } = entries[0].contentRect
+      syncBuffer(Math.round(width), Math.round(height))
+    })
     ro.observe(container)
 
-    /* Re-sync canvas when returning from a background tab or app switch */
+    /* Pause when hero leaves viewport, resume + re-sync on return */
+    const io = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting
+      if (visible) {
+        syncBuffer(container.offsetWidth, container.offsetHeight)
+        cancelAnimationFrame(animRef.current)
+        animRef.current = requestAnimationFrame(draw)
+      } else {
+        cancelAnimationFrame(animRef.current)
+      }
+    }, { threshold: 0 })
+    io.observe(container)
+
+    /* Re-sync when returning from a background tab */
     const handleVisibility = () => {
-      if (document.visibilityState === 'visible') {
-        resize()
+      if (document.visibilityState === 'visible' && visible) {
+        syncBuffer(container.offsetWidth, container.offsetHeight)
         cancelAnimationFrame(animRef.current)
         animRef.current = requestAnimationFrame(draw)
       }
@@ -103,6 +126,7 @@ export default function Hero() {
       active = false
       cancelAnimationFrame(animRef.current)
       ro.disconnect()
+      io.disconnect()
       document.removeEventListener('visibilitychange', handleVisibility)
     }
   }, [])
@@ -137,7 +161,7 @@ export default function Hero() {
       onTouchEnd={resetMouse}
       className="relative flex h-full w-full flex-col items-center justify-center"
     >
-      <canvas ref={canvasRef} className="absolute inset-0 z-0" />
+      <canvas ref={canvasRef} className="absolute top-0 left-0 z-0 h-full w-full" />
 
       {/* Identity — clamp()-scaled typography, no breakpoints needed */}
       <div className="pointer-events-none relative z-10 flex flex-col items-center gap-[clamp(0.75rem,2vw,2rem)] px-6">
