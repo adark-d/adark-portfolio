@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 
 /* ─── Fonts ─────────────────────────────────────────────────────────── */
@@ -17,6 +17,11 @@ const geistMono = Geist_Mono({
 
 const META_DESCRIPTION =
   'Senior AI & Data Engineer. Building fault-tolerant pipelines, production MLOps platforms, and multi-agent systems.'
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+}
 
 export const metadata: Metadata = {
   title: 'Adarkwah.',

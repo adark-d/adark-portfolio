@@ -32,7 +32,7 @@ export default function Navbar() {
     <>
       {/* ── Full-Screen Mobile Menu Overlay ────────────────────────────── */}
       <div
-        className={`fixed inset-0 z-[60] flex flex-col justify-center bg-[#060810]/95 px-12 backdrop-blur-3xl transition-all duration-700 ${
+        className={`fixed inset-0 z-[60] overflow-y-auto bg-[#060810]/95 backdrop-blur-3xl transition-all duration-700 ${
           isMobileMenuOpen
             ? 'pointer-events-auto opacity-100'
             : 'pointer-events-none opacity-0'
@@ -40,16 +40,17 @@ export default function Navbar() {
       >
         <button
           onClick={() => setIsMobileMenuOpen(false)}
-          className="absolute top-8 right-8 p-2 text-white/50 transition-transform hover:rotate-90 hover:text-white"
+          className="absolute top-6 right-6 z-10 p-2 text-white/50 transition-transform hover:rotate-90 hover:text-white sm:top-8 sm:right-8"
         >
           <X className="h-8 w-8" />
         </button>
-        <div className="flex flex-col gap-8">
+        <div className="flex min-h-full flex-col justify-center px-8 py-20 sm:px-12">
+        <div className="flex flex-col gap-5 sm:gap-8">
           {NAV_ITEMS.map((nav, i) => (
             <button
               key={nav.id}
               onClick={() => { setIsMobileMenuOpen(false); scrollTo(nav.id) }}
-              className={`transform text-left font-serif text-3xl text-white transition-all duration-500 hover:text-accent md:text-6xl ${
+              className={`transform text-left font-serif text-2xl text-white transition-all duration-500 hover:text-accent sm:text-3xl md:text-6xl ${
                 isMobileMenuOpen
                   ? 'translate-y-0 opacity-100'
                   : 'translate-y-12 opacity-0'
@@ -65,7 +66,7 @@ export default function Navbar() {
           {/* AI chat toggle in mobile menu */}
           <button
             onClick={() => { setIsMobileMenuOpen(false); toggle() }}
-            className={`transform text-left font-serif text-3xl transition-all duration-500 md:text-6xl ${
+            className={`transform text-left font-serif text-2xl transition-all duration-500 sm:text-3xl md:text-6xl ${
               isMobileMenuOpen
                 ? 'translate-y-0 opacity-100'
                 : 'translate-y-12 opacity-0'
@@ -82,6 +83,7 @@ export default function Navbar() {
               </span>
             </span>
           </button>
+        </div>
         </div>
       </div>
 
@@ -182,7 +184,7 @@ export default function Navbar() {
                 e.stopPropagation()
                 setIsMobileMenuOpen(true)
               }}
-              className={`flex flex-col gap-1.5 p-2 md:hidden ${isScrolled ? 'block' : 'hidden'}`}
+              className={`flex-col gap-1.5 p-2 md:hidden ${isScrolled ? 'flex' : 'hidden'}`}
             >
               <span className="block h-[2px] w-6 bg-white" />
               <span className="block h-[2px] w-4 bg-white" />
