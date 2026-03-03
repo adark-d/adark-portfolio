@@ -49,7 +49,7 @@ export default function IdentityProtocol() {
 
       {/* Part A — Axioms */}
       <div className="mx-auto max-w-[1400px] px-6 md:px-12 lg:px-24">
-        <div className="mb-12 flex items-center justify-between border-b border-[#f0ede6]/8 pb-6 md:mb-20 md:pb-8">
+        <div className="mb-12 flex items-center justify-between border-b pb-6 md:mb-20 md:pb-8">
           <h2 className="flex items-center gap-3 font-mono text-sm tracking-[0.2em] text-[#f0ede6]/40 uppercase">
             <Fingerprint className="h-4 w-4" /> About
           </h2>
@@ -70,7 +70,7 @@ export default function IdentityProtocol() {
             <div className="space-y-4 text-base leading-relaxed font-light text-[#f0ede6]/60 md:text-lg">
               <p>{personalInfo.philosophy}</p>
             </div>
-            <div className="grid grid-rows-2 gap-6 border-t border-[#f0ede6]/8 pt-6 md:gap-8 md:border-t-0 md:border-l md:pt-0 md:pl-12">
+            <div className="grid grid-rows-2 gap-6 border-t pt-6 md:gap-8 md:border-t-0 md:border-l md:pt-0 md:pl-12">
               <div>
                 <span className="mb-2 block font-serif text-2xl text-[#f0ede6] md:text-3xl">01</span>
                 <span className="mb-2 block font-mono text-xs tracking-widest text-warm/50 uppercase">
@@ -169,7 +169,7 @@ Current Focus
                         className={`rounded border px-3 py-1.5 font-mono text-[10px] tracking-widest uppercase transition-colors duration-700 ${
                           isActive
                             ? 'border-accent/30 bg-accent/10 text-accent'
-                            : 'border-[#f0ede6]/8 bg-[#f0ede6]/5 text-[#f0ede6]/30'
+                            : 'bg-[#f0ede6]/5 text-[#f0ede6]/30'
                         }`}
                       >
                         {award.category}

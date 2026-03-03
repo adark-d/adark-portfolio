@@ -26,7 +26,7 @@ function CopyButton({ text }: { text: string }) {
   return (
     <button
       onClick={handleCopy}
-      className="absolute -bottom-6 right-0 flex items-center gap-1 rounded-md px-1.5 py-0.5 font-mono text-[10px] text-white/0 transition-all group-hover:text-white/30 hover:!bg-white/5 hover:!text-white/60"
+      className="absolute -bottom-6 right-0 flex items-center gap-1 rounded-md px-1.5 py-0.5 font-mono text-[10px] text-white/0 transition-all group-hover:text-white/30 hover:bg-white/5! hover:text-white/60!"
     >
       {copied ? (
         <>
@@ -155,13 +155,13 @@ export default function ChatDrawer() {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={DRAWER_SPRING}
-            className="fixed top-0 right-0 z-50 flex h-full w-full flex-col border-l border-[#f0ede6]/8 bg-[#0b0d17]/95 backdrop-blur-xl md:w-[420px]"
+            className="fixed top-0 right-0 z-50 flex h-full w-full flex-col border-l bg-[#0b0d17]/95 backdrop-blur-xl md:w-[420px]"
           >
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-[#f0ede6]/8 px-6 py-4">
+            <div className="flex items-center justify-between border-b px-6 py-4">
               <div className="flex items-center gap-3">
                 <div className="relative">
-                  <img src="/favicon.svg" alt="" className="h-5 w-5 rounded-sm" />
+                  <img src="/favicon.svg" alt="" className="h-5 w-5 rounded-xs" />
                   <div className="absolute -top-0.5 -right-0.5 h-2 w-2 animate-pulse rounded-full bg-accent" />
                 </div>
                 <div>
@@ -197,8 +197,8 @@ export default function ChatDrawer() {
               {messages.length === 0 ? (
                 /* ── Empty State ──────────────────────────────────────── */
                 <div className="flex h-full flex-col items-center justify-center">
-                  <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-[#f0ede6]/8 bg-[#f0ede6]/5">
-                    <img src="/favicon.svg" alt="" className="h-8 w-8 rounded-sm" />
+                  <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full border bg-[#f0ede6]/5">
+                    <img src="/favicon.svg" alt="" className="h-8 w-8 rounded-xs" />
                   </div>
                   <p className="mb-8 max-w-[280px] text-center text-sm font-light text-[#f0ede6]/40">
                     Ask me anything about David&apos;s experience, projects, or technical
@@ -209,7 +209,7 @@ export default function ChatDrawer() {
                       <button
                         key={i}
                         onClick={() => sendMessage(q)}
-                        className="rounded-lg border border-[#f0ede6]/5 bg-[#f0ede6]/[0.02] px-4 py-3 text-left text-sm text-[#f0ede6]/45 transition-all hover:border-accent/15 hover:bg-accent/[0.04] hover:text-[#f0ede6]/70"
+                        className="rounded-lg border bg-[#f0ede6]/[0.02] px-4 py-3 text-left text-sm text-[#f0ede6]/45 transition-all hover:border-accent/15 hover:bg-accent/[0.04] hover:text-[#f0ede6]/70"
                       >
                         {q}
                       </button>
@@ -228,7 +228,7 @@ export default function ChatDrawer() {
                         className={`group relative max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                           message.role === 'user'
                             ? 'bg-[#f0ede6]/10 text-[#f0ede6]'
-                            : 'border border-[#f0ede6]/6 bg-[#f0ede6]/[0.03] text-[#f0ede6]/80'
+                            : 'border bg-[#f0ede6]/[0.03] text-[#f0ede6]/80'
                         }`}
                       >
                         {message.role === 'assistant' && !message.content && isStreaming ? (
@@ -273,7 +273,7 @@ export default function ChatDrawer() {
             </div>
 
             {/* Input */}
-            <div className="border-t border-[#f0ede6]/8 px-4 py-4">
+            <div className="border-t px-4 py-4">
               <div className="flex items-center gap-2 rounded-xl border border-[#f0ede6]/10 bg-[#f0ede6]/[0.03] px-4 py-2 transition-colors focus-within:border-accent/30">
                 <span className="font-mono text-xs text-accent/50">~</span>
                 <input
@@ -284,7 +284,7 @@ export default function ChatDrawer() {
                   onKeyDown={handleKeyDown}
                   placeholder="Ask about David..."
                   disabled={isStreaming}
-                  className="flex-1 bg-transparent text-sm text-white placeholder:text-white/20 focus:outline-none disabled:opacity-50"
+                  className="flex-1 bg-transparent text-sm text-white placeholder:text-white/20 focus:outline-hidden disabled:opacity-50"
                 />
                 <button
                   onClick={handleSend}

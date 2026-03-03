@@ -91,8 +91,8 @@ export default function Navbar() {
       <nav
         className={`fixed z-50 flex items-center justify-center overflow-hidden transition-all duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
           isScrolled
-            ? 'top-0 left-0 h-16 w-full translate-x-0 rounded-none border-b border-[#f0ede6]/8 bg-[#060810]/80 shadow-[0_10px_40px_rgba(0,0,0,0.5)] saturate-[1.5] backdrop-blur-2xl md:h-20'
-            : 'top-6 left-1/2 h-12 w-[240px] -translate-x-1/2 rounded-full border border-[#f0ede6]/8 bg-[#0b0d17]/80 backdrop-blur-xl md:top-8 md:h-14 md:w-[280px] md:hover:w-[calc(100vw-6rem)] lg:hover:w-[calc(100vw-12rem)] md:hover:max-w-[1400px]'
+            ? 'top-0 left-0 h-16 w-full translate-x-0 rounded-none border-b bg-[#060810]/80 shadow-[0_10px_40px_rgba(0,0,0,0.5)] saturate-[1.5] backdrop-blur-2xl md:h-20'
+            : 'top-6 left-1/2 h-12 w-[240px] -translate-x-1/2 rounded-full border bg-[#0b0d17]/80 backdrop-blur-xl md:top-8 md:h-14 md:w-[280px] md:hover:w-[calc(100vw-6rem)] lg:hover:w-[calc(100vw-12rem)] md:hover:max-w-[1400px]'
         } group cursor-pointer md:cursor-default`}
         onClick={() => {
           if (!isScrolled && window.innerWidth < 768) setIsMobileMenuOpen(true)
@@ -129,7 +129,7 @@ export default function Navbar() {
             Adarkwah.
           </span>
 
-          <div className="hidden items-center gap-1 rounded-full border border-[#f0ede6]/6 bg-[#0b0d17]/60 p-1.5 shadow-inner md:flex">
+          <div className="hidden items-center gap-1 rounded-full border bg-[#0b0d17]/60 p-1.5 inset-shadow-sm md:flex">
             {NAV_ITEMS.map((nav) => (
               <button
                 key={nav.id}
