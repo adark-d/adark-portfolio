@@ -1,6 +1,42 @@
-/* Tailwind is loaded via CDN in layout.tsx */
+@import "tailwindcss";
+
+@theme extend {
+  --color-void:     #060810;
+  --color-surface:  #0b0d17;
+  --color-elevated: #10131f;
+  --color-raised:   #161a2a;
+  --color-accent:   #5eead4;
+  --color-warm:     #d4a853;
+
+  --font-sans:  var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono:  var(--font-geist-mono), ui-monospace, monospace;
+  --font-serif: "Playfair Display", Georgia, serif;
+}
+
+/* ─── Base resets (moved from layout.tsx inline <style>) ────────────── */
 
 * {
   scrollbar-width: thin;
   scrollbar-color: rgba(240, 237, 230, 0.08) transparent;
 }
+
+*, ::before, ::after {
+  border-color: rgba(240, 237, 230, 0.12);
+}
+
+html { scroll-behavior: smooth; }
+
+::selection {
+  background: rgba(94, 234, 212, 0.25);
+  color: #f0ede6;
+}
+
+body {
+  background-color: #060810;
+  color: #f0ede6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+.hide-scroll::-webkit-scrollbar { display: none; }
+.hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
