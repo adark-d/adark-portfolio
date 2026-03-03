@@ -75,10 +75,10 @@ export default function CareerEvolution() {
   return (
     <section
       id="trajectory"
-      className="relative z-20 border-t border-[#f0ede6]/6 bg-void py-20 md:py-32"
+      className="relative z-20 border-t bg-void py-20 md:py-32"
     >
       <div className="mx-auto max-w-[1400px] px-6 md:px-12 lg:px-24">
-        <div className="mb-12 flex items-center justify-between border-b border-[#f0ede6]/8 pb-6 md:mb-24 md:pb-8">
+        <div className="mb-12 flex items-center justify-between border-b pb-6 md:mb-24 md:pb-8">
           <h2 className="flex items-center gap-3 font-mono text-sm tracking-[0.2em] text-[#f0ede6]/40 uppercase">
             <Layers className="h-4 w-4" /> Trajectory
           </h2>

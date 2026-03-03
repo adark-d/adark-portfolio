@@ -56,7 +56,7 @@ export default function Uplink() {
         </div>
       </section>
 
-      <footer className="border-t border-[#f0ede6]/6 px-6 py-10 md:px-12 lg:px-24">
+      <footer className="border-t px-6 py-10 md:px-12 lg:px-24">
         <div className="mx-auto flex max-w-[1400px] flex-col items-center justify-between gap-6 md:flex-row">
           <div className="flex flex-col items-center gap-1 md:items-start">
             <span className="font-serif text-2xl font-medium tracking-tighter text-[#f0ede6]">
@@ -66,7 +66,7 @@ export default function Uplink() {
               Engineer. Architect. Builder.
             </span>
           </div>
-          <span className="text-center font-mono text-xs tracking-widest text-[#f0ede6]/18">
+          <span className="text-center font-mono text-xs tracking-widest text-[#f0ede6]/30">
             © {new Date().getFullYear()} David Adarkwah. All rights reserved.
           </span>
         </div>

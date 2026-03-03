@@ -83,7 +83,7 @@ export default function Archive() {
   return (
     <section
       id="projects"
-      className="relative z-20 border-t border-[#f0ede6]/6 bg-surface py-20 md:py-32"
+      className="relative z-20 border-t bg-surface py-20 md:py-32"
     >
       <div className="mx-auto max-w-[1400px] px-6 md:px-12 lg:px-24">
         {/* Header & Filters */}
@@ -97,7 +97,7 @@ export default function Archive() {
             </h3>
           </div>
 
-          <div className="hide-scroll flex w-full max-w-full gap-1 overflow-x-auto rounded-full border border-[#f0ede6]/8 bg-elevated p-1 font-mono text-xs tracking-widest uppercase md:w-auto md:gap-2">
+          <div className="hide-scroll flex w-full max-w-full gap-1 overflow-x-auto rounded-full border bg-elevated p-1 font-mono text-xs tracking-widest uppercase md:w-auto md:gap-2">
             {FILTERS.map((f) => (
               <button
                 key={f}
@@ -114,7 +114,7 @@ export default function Archive() {
 
         {/* Project List */}
         <div ref={listRef} className="flex w-full flex-col" style={{ minHeight: listMinHeight }}>
-          <div className="hidden grid-cols-12 gap-6 border-b border-[#f0ede6]/12 pb-6 font-mono text-xs tracking-widest text-warm/40 uppercase md:grid">
+          <div className="hidden grid-cols-12 gap-6 border-b pb-6 font-mono text-xs tracking-widest text-warm/40 uppercase md:grid">
             <div className="col-span-5 pl-4">Title / Designation</div>
             <div className="col-span-4">Category</div>
             <div className="col-span-2">Year</div>
@@ -125,7 +125,7 @@ export default function Archive() {
             const isExpanded = expandedId === item.id
 
             return (
-              <div key={item.id} className="group border-b border-[#f0ede6]/6">
+              <div key={item.id} className="group border-b">
                 <div
                   onClick={() => setExpandedId(isExpanded ? null : item.id)}
                   className="grid cursor-pointer grid-cols-1 items-center gap-3 px-3 py-5 transition-colors hover:bg-[#f0ede6]/[0.03] md:grid-cols-12 md:gap-6 md:px-4 md:py-6"
@@ -150,7 +150,7 @@ export default function Archive() {
                       className={`flex items-center gap-2 rounded-full border px-3 py-1 font-mono text-xs transition-colors md:text-sm ${
                         isExpanded
                           ? 'border-accent/25 bg-accent/10 text-accent'
-                          : 'border-[#f0ede6]/6 bg-transparent text-[#f0ede6]/45 group-hover:border-accent/20'
+                          : 'bg-transparent text-[#f0ede6]/45 group-hover:border-accent/20'
                       }`}
                     >
                       {item.type === 'System' && <Terminal className="h-3 w-3" />}
@@ -189,11 +189,11 @@ export default function Archive() {
                 >
                   <div className="overflow-hidden">
                     <div
-                      className={`mx-2 mb-2 mt-0 flex flex-col gap-6 rounded-2xl border border-[#f0ede6]/6 bg-elevated p-4 transition-all duration-1000 md:m-4 md:mt-0 md:gap-8 md:p-8 lg:flex-row ${
+                      className={`mx-2 mb-2 mt-0 flex flex-col gap-6 rounded-2xl border bg-elevated p-4 transition-all duration-1000 md:m-4 md:mt-0 md:gap-8 md:p-8 lg:flex-row ${
                         isExpanded ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0'
                       }`}
                     >
-                      <div className="relative h-44 w-full overflow-hidden rounded-xl border border-[#f0ede6]/6 bg-[#060810] md:h-80 lg:w-5/12">
+                      <div className="relative h-44 w-full overflow-hidden rounded-xl border bg-[#060810] md:h-80 lg:w-5/12">
                         <img
                           src={item.image}
                           alt={item.title}
@@ -214,7 +214,7 @@ export default function Archive() {
                             isExpanded ? 'translate-x-0 opacity-100' : 'translate-x-8 opacity-0'
                           }`}
                         >
-                          <h5 className="mb-4 border-b border-[#f0ede6]/8 pb-2 font-mono text-sm tracking-widest text-warm/50 uppercase">
+                          <h5 className="mb-4 border-b pb-2 font-mono text-sm tracking-widest text-warm/50 uppercase">
                             Overview
                           </h5>
                           <p className="mb-6 text-sm leading-relaxed font-light text-[#f0ede6]/80 md:mb-8 md:text-xl">
@@ -230,7 +230,7 @@ export default function Archive() {
                           {item.stack.map((tech, i) => (
                             <span
                               key={i}
-                              className="rounded-sm border border-warm/15 bg-warm/8 px-3 py-1.5 font-mono text-[10px] tracking-widest text-warm/70 uppercase"
+                              className="rounded-xs border border-warm/15 bg-warm/8 px-3 py-1.5 font-mono text-[10px] tracking-widest text-warm/70 uppercase"
                             >
                               {tech}
                             </span>
